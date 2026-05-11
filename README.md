@@ -16,14 +16,6 @@ PROYECTO/
 ├── diagrams/
 │   ├── CasosDeUso.md             # Diagramas de casos de uso
 │   └── DiagramaClases.md         # Diagrama de clases UML
-├── src/
-│   └── main/
-│       ├── java/com/inventario/
-│       │   ├── model/            # Clases del modelo (MVC)
-│       │   ├── dao/              # Acceso a datos (DAO)
-│       │   ├── controller/       # Controladores
-│       │   └── view/             # Interfaces gráficas
-│       └── resources/            # Recursos de la aplicación
 └── README.md
 ```
 
