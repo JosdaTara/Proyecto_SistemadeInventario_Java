@@ -1,0 +1,17 @@
+# Compiled files
+*.class
+*.jar
+
+# IDE files
+.idea/
+*.iml
+nbproject/
+build/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Database config
+.env
+*.log
