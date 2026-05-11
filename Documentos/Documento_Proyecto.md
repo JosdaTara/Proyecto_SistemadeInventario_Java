@@ -28,14 +28,16 @@ La implementación de un sistema de inventario y ventas permitirá:
 
 ### Lenguaje de Programación
 - **Java SE** (versión 17 o superior) - Lenguaje principal para la lógica del negocio y la interfaz de usuario.
+- **HTML 5** - Frontend
+- **CSS** - Frontend
 
 ### Entorno de Desarrollo
-- **IDE**: Apache NetBeans o IntelliJ IDEA Community Edition
+- **IDE**: Apache NetBeans o Spring Boot
 - **JDK**: Java Development Kit 17 LTS
 
 ### Base de Datos
 - **SGBD**: MySQL 8.0 o superior
-- **Conector JDBC**: mysql-connector-java 8.x
+- **Conector JDBC**: mysql-connector-java 8
 
 ### Herramientas de Diseño
 - **MySQL Workbench** - Para el diseño del modelo entidad-relación (DER)
