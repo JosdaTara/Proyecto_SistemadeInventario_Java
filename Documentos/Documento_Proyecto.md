@@ -28,7 +28,7 @@ La implementación de un sistema de inventario y ventas permitirá:
 
 ### Backend
 - **Java 17** - Lenguaje principal para la lógica del negocio
-- **Spring Boot 3.x** - Framework principal para el desarrollo de la aplicación
+- **Spring Boot 5.11** - Framework principal para el desarrollo de la aplicación
 - **Spring MVC** - Patrón de arquitectura para la capa web
 - **Spring Data JPA / Hibernate** - ORM para el acceso a datos
 - **Spring Security** - Autenticación y control de acceso por roles
