@@ -9,8 +9,8 @@
     --bg: #F8FAFC;
     --panel: #FFFFFF;
     --text: #1F2937;
-    --text-dim: #64748B;
-    --text-light: #94A3B8;
+    --text-dim: #475569;
+    --text-light: #64748B;
     --error: #EF4444;
     --border: #E2E8F0;
     --sidebar-width: 250px;
@@ -345,8 +345,9 @@ body {
 }
 
 .sidebar-brand small {
-    color: var(--text-dim);
+    color: var(--text);
     font-size: 0.7rem;
+    opacity: 0.7;
 }
 
 .sidebar-menu {
@@ -358,7 +359,8 @@ body {
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--text-light);
+    color: var(--text);
+    opacity: 0.6;
 }
 
 .sidebar-menu .nav-item {
@@ -366,7 +368,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: var(--text-dim);
+    color: var(--text);
     text-decoration: none;
     transition: all 0.3s;
     border-left: 3px solid transparent;
@@ -376,7 +378,7 @@ body {
 
 .sidebar-menu .nav-item:hover {
     background: rgba(22, 101, 52, 0.04);
-    color: var(--text);
+    color: var(--primary);
 }
 
 .sidebar-menu .nav-item.active {
@@ -424,7 +426,7 @@ body {
 }
 
 .topbar .user-info > span {
-    color: var(--text-dim) !important;
+    color: var(--text) !important;
 }
 
 .topbar .user-avatar {
@@ -508,8 +510,9 @@ body {
 
 .stat-card .stat-info p {
     margin: 0;
-    color: var(--text-dim);
+    color: var(--text);
     font-size: 0.85rem;
+    opacity: 0.7;
 }
 
 .actions-grid {
@@ -525,7 +528,7 @@ body {
     padding: 1.5rem 1.25rem;
     text-align: center;
     text-decoration: none;
-    color: var(--text-dim);
+    color: var(--text);
     border: 1px solid var(--border);
     transition: all 0.3s;
 }
@@ -540,8 +543,9 @@ body {
 .action-card .icon {
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    color: var(--text-light);
-    transition: color 0.3s;
+    color: var(--text);
+    opacity: 0.5;
+    transition: all 0.3s;
 }
 
 .action-card:hover .icon {
@@ -585,7 +589,7 @@ body {
 }
 
 .table > thead > tr > th {
-    color: var(--text-dim);
+    color: var(--text);
     font-weight: 600;
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -627,7 +631,7 @@ body {
 
 .btn-outline-custom {
     border: 1px solid var(--border);
-    color: var(--text-dim);
+    color: var(--text);
     background: transparent;
     border-radius: 8px;
     padding: 0.4rem 1rem;

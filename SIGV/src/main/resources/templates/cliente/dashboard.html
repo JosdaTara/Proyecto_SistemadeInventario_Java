@@ -10,52 +10,36 @@
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-brand">
-                <div class="brand-icon"><i class="bi bi-box-seam-fill"></i></div>
+                <div class="brand-icon"><i class="bi bi-shop"></i></div>
                 <div>
                     <h5>GesCom</h5>
-                    <small>Gestion Comercial</small>
+                    <small>Cliente</small>
                 </div>
             </div>
             <div class="sidebar-menu">
-                <div class="menu-label">Menu Principal</div>
+                <div class="menu-label">Menu</div>
                 <a class="nav-item active">
                     <span class="icon"><i class="bi bi-grid"></i></span>
                     <span>Dashboard</span>
                 </a>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-box"></i></span>
+                <a th:href="@{/cliente/productos}" class="nav-item">
+                    <span class="icon"><i class="bi bi-box-seam"></i></span>
                     <span>Productos</span>
                 </a>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-cart"></i></span>
-                    <span>Pedidos</span>
+                <a th:href="@{/cliente/pedidos}" class="nav-item">
+                    <span class="icon"><i class="bi bi-cart-check"></i></span>
+                    <span>Mis Pedidos</span>
                 </a>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-people"></i></span>
-                    <span>Clientes</span>
-                </a>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-file-earmark-text"></i></span>
-                    <span>Facturas</span>
-                </a>
-                <div class="menu-label">Reportes</div>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-bar-chart"></i></span>
-                    <span>Ventas</span>
-                </a>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-archive"></i></span>
-                    <span>Inventario</span>
+                <a th:href="@{/cliente/perfil}" class="nav-item">
+                    <span class="icon"><i class="bi bi-person"></i></span>
+                    <span>Mi Perfil</span>
                 </a>
             </div>
         </nav>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Topbar -->
             <header class="topbar">
                 <div class="page-title">
                     <h4>Dashboard</h4>
@@ -71,96 +55,102 @@
                 </div>
             </header>
 
-            <!-- Content -->
             <div class="content-area">
-                <!-- Stats Cards -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon blue">
-                            <i class="bi bi-box"></i>
+                        <div class="stat-icon green">
+                            <i class="bi bi-box-seam"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>0</h3>
-                            <p>Productos registrados</p>
+                            <h3 th:text="${totalProductos}">0</h3>
+                            <p>Productos disponibles</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon green">
+                        <div class="stat-icon blue">
                             <i class="bi bi-cart-check"></i>
                         </div>
                         <div class="stat-info">
                             <h3>0</h3>
-                            <p>Pedidos activos</p>
+                            <p>Mis pedidos</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon orange">
-                            <i class="bi bi-people"></i>
+                            <i class="bi bi-clock-history"></i>
                         </div>
                         <div class="stat-info">
                             <h3>0</h3>
-                            <p>Clientes registrados</p>
+                            <p>Pendientes</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon teal">
-                            <i class="bi bi-cash-stack"></i>
+                            <i class="bi bi-truck"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>$0.00</h3>
-                            <p>Ventas del mes</p>
+                            <h3>0</h3>
+                            <p>En envio</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <h5 class="fw-bold mb-3" style="color:#1a1a2e;">
+                <h5 class="fw-bold mb-3" style="color:var(--text);">
                     <i class="bi bi-lightning-charge me-2"></i>Acciones Rapidas
                 </h5>
                 <div class="actions-grid">
-                    <a href="#" class="action-card">
-                        <div class="icon"><i class="bi bi-box"></i></div>
-                        <h6>Nuevo Producto</h6>
+                    <a th:href="@{/cliente/productos}" class="action-card">
+                        <div class="icon"><i class="bi bi-box-seam"></i></div>
+                        <h6>Ver Catalogo</h6>
                     </a>
                     <a href="#" class="action-card">
-                        <div class="icon"><i class="bi bi-cart"></i></div>
-                        <h6>Nuevo Pedido</h6>
+                        <div class="icon"><i class="bi bi-cart-plus"></i></div>
+                        <h6>Hacer Pedido</h6>
                     </a>
-                    <a href="#" class="action-card">
-                        <div class="icon"><i class="bi bi-people"></i></div>
-                        <h6>Registrar Cliente</h6>
+                    <a th:href="@{/cliente/pedidos}" class="action-card">
+                        <div class="icon"><i class="bi bi-clock-history"></i></div>
+                        <h6>Mis Pedidos</h6>
                     </a>
-                    <a href="#" class="action-card">
-                        <div class="icon"><i class="bi bi-file-earmark-text"></i></div>
-                        <h6>Generar Factura</h6>
-                    </a>
-                    <a href="#" class="action-card">
-                        <div class="icon"><i class="bi bi-bar-chart"></i></div>
-                        <h6>Reporte de Ventas</h6>
+                    <a th:href="@{/cliente/perfil}" class="action-card">
+                        <div class="icon"><i class="bi bi-person-gear"></i></div>
+                        <h6>Mi Perfil</h6>
                     </a>
                 </div>
 
-                <!-- Recent Activity Table -->
                 <div class="table-container">
                     <div class="table-header">
-                        <h5><i class="bi bi-clock-history me-2"></i>Actividad Reciente</h5>
-                        <a href="#" class="btn btn-outline-custom btn-sm-custom">Ver todo</a>
+                        <h5><i class="bi bi-star me-2"></i>Productos Destacados</h5>
+                        <a th:href="@{/cliente/productos}" class="btn btn-outline-custom btn-sm-custom">Ver todos</a>
                     </div>
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                        <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Descripcion</th>
-                                <th>Usuario</th>
-                                <th>Estado</th>
-                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th>Categoria</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr th:each="p : ${productos}">
+                                <td><strong th:text="${p.nombre}">Producto</strong></td>
+                                <td th:text="${p.categoria}">Categoria</td>
+                                <td th:text="'$' + ${p.precio}">$0.00</td>
+                                <td>
+                                    <span th:if="${p.stock > 0}" class="badge" style="background:rgba(34,197,94,0.1);color:#22C55E;font-weight:500;" th:text="${p.stock + ' en stock'}">stock</span>
+                                    <span th:unless="${p.stock > 0}" class="badge" style="background:rgba(239,68,68,0.1);color:#EF4444;font-weight:500;">Agotado</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline-custom btn-sm-custom">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(productos)}">
                                 <td colspan="5" class="text-center text-muted py-4">
                                     <i class="bi bi-inbox" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
-                                    No hay actividad registrada aun
+                                    No hay productos disponibles aun
                                 </td>
                             </tr>
                         </tbody>
