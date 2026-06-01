@@ -155,23 +155,87 @@ classDiagram
 
 ## Flujo de la Aplicacion
 
+### Inicio de Sesion
+
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant C as Controlador
+    participant S as Spring Security
+    participant DB as Base de Datos
+
+    U->>C: POST /login (email + password)
+    C->>S: Autenticar credenciales
+    S->>DB: Buscar usuario por email
+    DB-->>S: Usuario + roles
+    S->>S: Verificar BCrypt
+    alt Credenciales validas
+        S-->>U: Redirect segun rol<br/>(/dashboard o /cliente/dashboard)
+    else Credenciales invalidas
+        S-->>U: Redirect /login?error
+    end
 ```
-   Usuario                    Servidor                  Base de Datos
-     │                          │                          │
-     ├── Login ────────────────►│                          │
-     │                          ├── Buscar email ────────►│
-     │                          │◄── Usuario + roles ─────┤
-     │                          ├── Verificar BCrypt       │
-     │◄── Redirect segun rol ──┤                          │
-     │                          │                          │
-     ├── CRUD Productos ───────►│                          │
-     │                          ├── SELECT/INSERT/UPDATE ─►│
-     │◄── Vista Thymeleaf ─────┤                          │
-     │                          │                          │
-     ├── Carrito / Checkout ───►│                          │
-     │                          ├── Validar stock ────────►│
-     │                          ├── Crear Pedido ─────────►│
-     │                          ├── Descontar stock ──────►│
-     │                          ├── Generar Factura ──────►│
-     │◄── Confirmacion ────────┤                          │
+
+### Compra (Carrito + Checkout)
+
+```mermaid
+sequenceDiagram
+    actor C as Cliente
+    participant Ctrl as ClienteController
+    participant Sess as Sesion HTTP
+    participant DB as Base de Datos
+
+    C->>Ctrl: Agregar al carrito
+    Ctrl->>DB: Validar producto y stock
+    DB-->>Ctrl: Producto OK
+    Ctrl->>Sess: Guardar en carrito
+    Ctrl-->>C: Redirect a catalogo
+
+    C->>Ctrl: POST /checkout
+    Ctrl->>Sess: Obtener items del carrito
+    Sess-->>Ctrl: Lista de items
+    Ctrl->>DB: Validar stock de cada item
+    Ctrl->>DB: Crear Pedido (PENDIENTE)
+    Ctrl->>DB: Crear DetallePedido
+    Ctrl->>DB: Descontar stock
+    Ctrl->>DB: Generar Factura (FAC-XXXXX)
+    Ctrl->>Sess: Vaciar carrito
+    Ctrl-->>C: Redirect a /cliente/pedidos
+```
+
+### Gestion de Productos (Admin)
+
+```mermaid
+sequenceDiagram
+    actor A as Administrador
+    participant C as ProductoController
+    participant DB as Base de Datos
+
+    A->>C: GET /productos
+    C->>DB: SELECT * FROM productos
+    DB-->>C: Lista de productos
+    C-->>A: Vista Thymeleaf (listar.html)
+
+    A->>C: GET /productos/nuevo
+    C-->>A: Vista formulario (form.html)
+
+    A->>C: POST /productos/guardar
+    C->>DB: INSERT/UPDATE producto
+    DB-->>C: Producto guardado
+    C-->>A: Redirect a /productos + mensaje
+```
+
+### Ciclo de Vida del Pedido (Admin)
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDIENTE : Cliente realiza compra
+    PENDIENTE --> CONFIRMADO : Admin confirma
+    CONFIRMADO --> ENVIADO : Admin despacha
+    ENVIADO --> ENTREGADO : Cliente recibe
+    PENDIENTE --> CANCELADO : Admin cancela
+    CONFIRMADO --> CANCELADO : Admin cancela
+    ENVIADO --> CANCELADO : Admin cancela
+    ENTREGADO --> [*]
+    CANCELADO --> [*]
 ```
