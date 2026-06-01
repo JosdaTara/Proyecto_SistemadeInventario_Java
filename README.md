@@ -24,9 +24,9 @@ PROYECTO/
 │   │   ├── 📁 main/
 │   │   │   ├── 📁 java/uts/edu/java/
 │   │   │   │   ├── 📁 config/        # SecurityConfig, DataInitializer, AuthSuccessHandler
-│   │   │   │   ├── 📁 controller/    # AuthController, ClienteController
-│   │   │   │   ├── 📁 model/         # Usuario, Rol, Producto
-│   │   │   │   ├── 📁 repository/    # UsuarioRepository, RolRepository, ProductoRepository
+│   │   │   │   ├── 📁 controller/    # AuthController, ClienteController, ProductoController, PedidoAdminController
+│   │   │   │   ├── 📁 model/         # Usuario, Rol, Producto, Pedido, DetallePedido, Factura
+│   │   │   │   ├── 📁 repository/    # UsuarioRepository, RolRepository, ProductoRepository, PedidoRepository, DetallePedidoRepository, FacturaRepository
 │   │   │   │   ├── 📁 service/       # UsuarioService, CustomUserDetailsService
 │   │   │   │   └── SIstemaGestionInventarioApplication.java
 │   │   │   └── 📁 resources/
@@ -35,10 +35,19 @@ PROYECTO/
 │   │   │       │   ├── login.html    # Inicio de sesión
 │   │   │       │   ├── registro.html # Registro de usuarios
 │   │   │       │   ├── dashboard.html# Panel de administrador
+│   │   │       │   ├── 📁 admin/     # Gestión admin
+│   │   │       │   │   ├── pedidos.html
+│   │   │       │   │   └── pedido-detalle.html
+│   │   │       │   ├── 📁 productos/ # CRUD de productos
+│   │   │       │   │   ├── listar.html
+│   │   │       │   │   └── form.html
 │   │   │       │   └── 📁 cliente/   # Panel de cliente
 │   │   │       │       ├── dashboard.html
 │   │   │       │       ├── productos.html
+│   │   │       │       ├── carrito.html
 │   │   │       │       ├── pedidos.html
+│   │   │       │       ├── pedido-detalle.html
+│   │   │       │       ├── factura.html
 │   │   │       │       └── perfil.html
 │   │   │       └── application.properties
 │   │   └── 📁 test/
@@ -71,8 +80,8 @@ PROYECTO/
 
 | Rol | Acceso | Descripción |
 |-----|--------|-------------|
-| **ADMINISTRADOR** | `/dashboard` | Gestión de inventario, ventas, facturación |
-| **CLIENTE** | `/cliente/dashboard` | Catálogo de productos, pedidos, perfil |
+| **ADMINISTRADOR** | `/dashboard`, `/productos`, `/admin/pedidos` | Gestión de inventario, productos, pedidos, ventas, facturación |
+| **CLIENTE** | `/cliente/dashboard`, `/cliente/productos`, `/cliente/carrito`, `/cliente/pedidos`, `/cliente/perfil` | Catálogo de productos, carrito, pedidos, perfil y facturas |
 
 ## Usuarios por Defecto
 - **Admin:** `admin@admin.com` / `admin123` (se crea automáticamente al iniciar)
@@ -107,13 +116,19 @@ spring.datasource.password=
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-## Funcionalidades (Prototipo)
+## Funcionalidades
 
-- ✅ Login / Registro con validación
-- ✅ Roles: Administrador y Cliente
-- ✅ Dashboard Administrador con sidebar, stats y acciones rápidas
-- ✅ Dashboard Cliente con catálogo de productos
-- ✅ Vista de perfil de usuario
+- ✅ Login / Registro con validación y BCrypt
+- ✅ Roles: Administrador y Cliente con redirección automática
+- ✅ Dashboard Administrador con stats dinámicos y acciones rápidas
+- ✅ Dashboard Cliente con catálogo de productos destacados
+- ✅ Vista de perfil de usuario con datos personales
 - ✅ Tema verde corporativo profesional
-- 🔄 Catálogo de productos con imágenes (placeholder)
-- 🔄 Pedidos y facturación (en desarrollo)
+- ✅ CRUD completo de productos (Admin): crear, editar, eliminar, listar
+- ✅ Carrito de compras en sesión (agregar, actualizar, eliminar)
+- ✅ Checkout: pedido con descuento de stock automático
+- ✅ Historial de pedidos con estados (Pendiente → Confirmado → Enviado → Entregado → Cancelado)
+- ✅ Gestión de pedidos (Admin): ver detalle y cambiar estado
+- ✅ Facturación automática al crear pedido, con vista imprimible
+- ✅ Catálogo de productos con placeholders visuales
+- ✅ Seguridad por ruta según rol (Spring Security)
