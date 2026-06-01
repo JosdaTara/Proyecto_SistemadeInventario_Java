@@ -1,225 +1,215 @@
 # Diagrama de Clases
 
-## Modelo MVC - Sistema de Inventario y Ventas
+> Los diagramas están renderizados con [Mermaid](https://mermaid.js.org/). Se visualizan automáticamente en GitHub y en editores compatibles.
 
-```
+## Modelo del Dominio (Entidades JPA)
 
-                    DIAGRAMA DE CLASES
-              Sistema de Inventario y Ventas
+```mermaid
+classDiagram
+    class Usuario {
+        - Integer idUsuario
+        - String nombre
+        - String email
+        - String passwordHash
+        - Boolean activo
+        - Date fechaRegistro
+        + getAuthorities() Collection
+    }
 
+    class Rol {
+        - Integer idRol
+        - String nombre
+        - String descripcion
+    }
 
-  ┌─────────────────────┐        ┌─────────────────────────┐
-  │        Rol          │        │        Usuario          │
-  ├─────────────────────┤        ├─────────────────────────┤
-  │ - idRol: int        │1      *│ - idUsuario: int        │
-  │ - nombre: String    │◄───────│ - nombre: String        │
-  │ - descripcion: Str  │        │ - email: String         │
-  └─────────────────────┘        │ - passwordHash: String  │
-                                  │ - activo: boolean      │
-  ┌─────────────────────┐        │ - fechaRegistro: Date   │
-  │      Categoria      │        ├─────────────────────────┤
-  ├─────────────────────┤        │ + login(): boolean      │
-  │ - idCategoria: int  │1       │ + getRoles(): String    │
-  │ - nombre: String    │        └─────────────────────────┘
-  │ - descripcion: Str  │                   ▲
-  └──────────┬──────────┘                  │
-             │                             │
-             │                             │
-             │1                    ┌───────┴────────┐
-             │                    │                │
-             │                    │                │
-  ┌──────────┴──────────┐  ┌─────┴──────┐  ┌──────┴──────┐
-  │      Producto       │  │ Administra │  │   Cliente   │
-  ├─────────────────────┤  │   -dor     │  │ (usuario)   │
-  │ - idProducto: int   │  ├────────────┤  ├─────────────┤
-  │ - nombre: String    │  │ + gestionar │  │ + realizar  │
-  │ - descripcion: Str  │  │ Usuarios()  │  │ Pedido()    │
-  │ - precio: double    │  │ + gestionar │  │ + consultar │
-  │ - stock: int        │  │ Productos() │  │ Pedidos()   │
-  │ - stockMinimo: int  │  │ + reportes()│  │ + consultar │
-  │ - activo: boolean   │  └────────────┘  │ Facturas()  │
-  │ - fechaCreacion:Date│                  └─────────────┘
-  ├─────────────────────┤
-  │ + actualizarStock() │
-  │ + disponible():bool │        ┌─────────────────────┐
-  └──────────┬──────────┘        │      Cliente        │
-             │                   ├─────────────────────┤
-             │                   │ - idCliente: int    │
-             │                   │ - nombre: String    │
-             │                   │ - direccion: String │
-             │                   │ - telefono: String  │
-             │                   │ - email: String     │
-             │                   │ - fechaRegistro:Date│
-             │                   └─────────────────────┘
-             │                            │
-             │                            │1
-             │                            │
-             │                            ▼
-             │                   ┌─────────────────────┐
-             │                   │       Pedido         │
-             │                   ├─────────────────────┤
-             │              *    │ - idPedido: int     │
-             └───────────────────│ - fechaPedido: Date │
-                  *              │ - estado: Enum      │
-                                 │ - total: double     │
-                                 ├─────────────────────┤
-                                 │ + calcularTotal()   │
-                                 │ + cambiarEstado()   │
-                                 └──────────┬──────────┘
-                                            │
-                                            │1
-                                            │
-                                            ▼
-  ┌─────────────────────┐        ┌─────────────────────┐
-  │   DetallePedido     │        │      Factura         │
-  ├─────────────────────┤        ├─────────────────────┤
-  │ - idDetalle: int    │        │ - idFactura: int    │
-  │ - cantidad: int     │        │ - fechaEmision: Date│
-  │ - precioUnit: double│        │ - total: double     │
-  │ - subtotal: double  │        ├─────────────────────┤
-  ├─────────────────────┤        │ + generarFactura()  │
-  │ + calcularSubtotal()│        └──────────┬──────────┘
-  └─────────────────────┘                   │
-                                             │1
-                                             │
-                                             ▼
-                                   ┌─────────────────────┐
-                                   │       Venta          │
-                                   ├─────────────────────┤
-                                   │ - idVenta: int      │
-                                   │ - fechaVenta: Date  │
-                                   │ - total: double     │
-                                   └─────────────────────┘
-```
+    class Producto {
+        - Integer idProducto
+        - String nombre
+        - String descripcion
+        - BigDecimal precio
+        - Integer stock
+        - String categoria
+        - Boolean activo
+        - String imagenUrl
+    }
 
-## Capa de Presentación (Vistas - Thymeleaf + HTML/CSS/JS)
+    class Pedido {
+        - Integer idPedido
+        - Date fechaPedido
+        - String estado
+        - BigDecimal total
+    }
 
-```
-                    VISTAS (Thymeleaf)
+    class DetallePedido {
+        - Integer idDetalle
+        - Integer cantidad
+        - BigDecimal precioUnitario
+        - BigDecimal subtotal
+    }
 
-  ┌──────────────────────┐  ┌──────────────────────┐
-  │   login.html         │  │   dashboard.html     │
-  │   (Autenticación)    │  │   (Panel principal)  │
-  └──────────────────────┘  └──────────────────────┘
+    class Factura {
+        - Integer idFactura
+        - String numeroFactura
+        - Date fechaEmision
+        - BigDecimal total
+        - String metodoPago
+    }
 
-  ┌──────────────────────┐  ┌──────────────────────┐
-  │   productos/         │  │   pedidos/           │
-  │   listar.html        │  │   listar.html        │
-  │   form.html          │  │   detalle.html       │
-  └──────────────────────┘  └──────────────────────┘
-
-  ┌──────────────────────┐  ┌──────────────────────┐
-  │   clientes/          │  │   facturas/          │
-  │   listar.html        │  │   listar.html        │
-  │   form.html          │  │   detalle.html       │
-  └──────────────────────┘  └──────────────────────┘
-
-  Recursos estáticos: /css/, /js/, /images/
+    Usuario "1" --> "*" Rol : tiene
+    Usuario "1" --> "*" Pedido : realiza
+    Pedido "1" --> "*" DetallePedido : contiene
+    Producto "1" --> "*" DetallePedido : aparece en
+    Pedido "1" --> "1" Factura : genera
 ```
 
 ## Capa de Control (Controladores Spring MVC)
 
-```
-               CONTROLADORES (Spring MVC)
+```mermaid
+classDiagram
+    class AuthController {
+        + login() String
+        + registroForm() String
+        + registrar() String
+        + dashboard() String
+    }
 
-  ┌─────────────────────────┐  ┌─────────────────────────┐
-  │ @Controller             │  │ @Controller             │
-  │ AuthController          │  │ ProductoController      │
-  ├─────────────────────────┤  ├─────────────────────────┤
-  │ + login()               │  │ + listar()              │
-  │ + procesarLogin()       │  │ + guardar()             │
-  │ + registro()            │  │ + editar()              │
-  │ + logout()              │  │ + eliminar()            │
-  └─────────────────────────┘  └─────────────────────────┘
+    class ProductoController {
+        + listar() String
+        + nuevoForm() String
+        + guardar() String
+        + editarForm() String
+        + eliminar() String
+    }
 
-  ┌─────────────────────────┐  ┌─────────────────────────┐
-  │ @Controller             │  │ @Controller             │
-  │ PedidoController        │  │ FacturaController       │
-  ├─────────────────────────┤  ├─────────────────────────┤
-  │ + crear()               │  │ + listar()              │
-  │ + listar()              │  │ + detalle()             │
-  │ + cambiarEstado()       │  │ + generarPDF()          │
-  │ + detalle()             │  └─────────────────────────┘
-  └─────────────────────────┘
-  ┌─────────────────────────┐
-  │ @RestController         │
-  │ ProductoRestController  │
-  ├─────────────────────────┤
-  │ + buscarPorCategoria()  │
-  │ + obtenerStock()        │
-  └─────────────────────────┘
-```
+    class ClienteController {
+        + dashboard() String
+        + productos() String
+        + verCarrito() String
+        + agregarCarrito() String
+        + actualizarCarrito() String
+        + eliminarCarrito() String
+        + checkout() String
+        + pedidos() String
+        + verPedido() String
+        + verFactura() String
+        + perfil() String
+    }
 
-## Capa de Servicios (Spring Service)
+    class PedidoAdminController {
+        + listar() String
+        + detalle() String
+        + actualizarEstado() String
+    }
 
-```
-                    SERVICIOS (@Service)
-
-  ┌──────────────────────┐  ┌──────────────────────┐
-  │ @Service             │  │ @Service             │
-  │ UsuarioService       │  │ ProductoService      │
-  ├──────────────────────┤  ├──────────────────────┤
-  │ + autenticar()       │  │ + listarTodos()      │
-  │ + registrar()        │  │ + guardar()          │
-  │ + listar()           │  │ + actualizar()       │
-  │ + desactivar()       │  │ + eliminar()         │
-  └──────────────────────┘  │ + buscarPorCategoria()│
-                             └──────────────────────┘
-  ┌──────────────────────┐  ┌──────────────────────┐
-  │ @Service             │  │ @Service             │
-  │ PedidoService        │  │ FacturaService       │
-  ├──────────────────────┤  ├──────────────────────┤
-  │ + crear()            │  │ + emitir()           │
-  │ + listar()           │  │ + listar()           │
-  │ + cambiarEstado()    │  │ + buscarPorFecha()   │
-  │ + calcularTotal()    │  │ + generarPDF()       │
-  └──────────────────────┘  └──────────────────────┘
+    AuthController --> UsuarioService
+    AuthController --> ProductoRepository
+    AuthController --> UsuarioRepository
+    AuthController --> PedidoRepository
+    ProductoController --> ProductoRepository
+    ClienteController --> UsuarioRepository
+    ClienteController --> ProductoRepository
+    ClienteController --> PedidoRepository
+    ClienteController --> FacturaRepository
+    PedidoAdminController --> PedidoRepository
 ```
 
-## Capa de Acceso a Datos (Spring Data JPA)
+## Capa de Servicios
 
-```
-               REPOSITORIOS (Spring Data JPA)
+```mermaid
+classDiagram
+    class UsuarioService {
+        + registrarUsuario() void
+        + buscarPorEmail() Usuario
+    }
 
-  ┌──────────────────┐  ┌──────────────────┐
-  │ @Repository      │  │ @Repository      │
-  │ UsuarioRepo      │  │ ProductoRepo     │
-  ├──────────────────┤  ├──────────────────┤
-  │ extends          │  │ extends          │
-  │ JpaRepository    │  │ JpaRepository    │
-  │ + findByEmail()  │  │ + findByCategoria│
-  └──────────────────┘  │ + findByStockLess│
-                         └──────────────────┘
-  ┌──────────────────┐  ┌──────────────────┐
-  │ @Repository      │  │ @Repository      │
-  │ PedidoRepo       │  │ FacturaRepo      │
-  ├──────────────────┤  ├──────────────────┤
-  │ extends          │  │ extends          │
-  │ JpaRepository    │  │ JpaRepository    │
-  │ + findByCliente()│  │ + findByFecha()  │
-  │ + findByEstado() │  └──────────────────┘
-  └──────────────────┘
+    class CustomUserDetailsService {
+        + loadUserByUsername() UserDetails
+    }
+
+    CustomUserDetailsService --> UsuarioRepository
+    UsuarioService --> UsuarioRepository
+    UsuarioService --> RolRepository
+    UsuarioService --> BCryptPasswordEncoder
 ```
 
-## Relaciones entre Clases
+## Capa de Acceso a Datos (Repositorios)
 
-| Clase A | Relación | Clase B | Descripción |
-|---------|----------|---------|-------------|
-| Rol | 1 --- * | Usuario | Un rol puede tener muchos usuarios |
-| Categoria | 1 --- * | Producto | Una categoría agrupa muchos productos |
-| Producto | * --- * | Pedido | A través de DetallePedido |
-| Pedido | 1 --- * | DetallePedido | Un pedido tiene muchos detalles |
-| Producto | 1 --- * | DetallePedido | Un producto aparece en muchos detalles |
-| Cliente | 1 --- * | Pedido | Un cliente puede realizar muchos pedidos |
-| Pedido | 1 --- 1 | Factura | Un pedido genera una factura |
-| Factura | 1 --- * | Venta | Una factura puede tener varios registros de venta |
-| Usuario | 1 --- * | Pedido | Un usuario gestiona muchos pedidos |
-| Usuario | 1 --- * | Factura | Un usuario emite muchas facturas |
+```mermaid
+classDiagram
+    class UsuarioRepository {
+        <<JpaRepository>>
+        + findByEmail() Optional~Usuario~
+        + existsByEmail() boolean
+        + countByRolesNombre() long
+    }
 
-## Patrón de Diseño
+    class RolRepository {
+        <<JpaRepository>>
+        + findByNombre() Optional~Rol~
+    }
 
-El sistema sigue el patrón **Spring MVC (Modelo-Vista-Controlador)**:
+    class ProductoRepository {
+        <<JpaRepository>>
+        + findByActivoTrue() List~Producto~
+        + findByCategoriaAndActivoTrue() List~Producto~
+        + findAllByOrderByNombreAsc() List~Producto~
+    }
 
-- **Modelo**: Clases de entidad (Rol, Usuario, Producto, Pedido, etc.) + Repositorios JPA + Servicios
-- **Vista**: Plantillas Thymeleaf (HTML5 + CSS3 + JavaScript)
-- **Controlador**: Controladores anotados con `@Controller` que manejan peticiones HTTP
+    class PedidoRepository {
+        <<JpaRepository>>
+        + findByUsuarioOrderByFechaPedidoDesc() List~Pedido~
+        + findAllByOrderByFechaPedidoDesc() List~Pedido~
+    }
+
+    class FacturaRepository {
+        <<JpaRepository>>
+        + findByPedido() Optional~Factura~
+        + existsByPedido() boolean
+    }
+
+    class DetallePedidoRepository {
+        <<JpaRepository>>
+    }
+```
+
+## Vistas (Thymeleaf)
+
+```
+├── login.html              # Inicio de sesión
+├── registro.html           # Registro de usuarios
+├── dashboard.html          # Dashboard administrador
+├── admin/
+│   ├── pedidos.html        # Lista de pedidos (admin)
+│   └── pedido-detalle.html # Detalle + cambio de estado
+├── productos/
+│   ├── listar.html         # CRUD productos
+│   └── form.html           # Crear/editar producto
+├── cliente/
+│   ├── dashboard.html      # Dashboard cliente
+│   ├── productos.html      # Catálogo de productos
+│   ├── carrito.html        # Carrito de compras
+│   ├── pedidos.html        # Mis pedidos
+│   ├── pedido-detalle.html # Detalle del pedido
+│   ├── factura.html        # Factura imprimible
+│   └── perfil.html         # Perfil de usuario
+```
+
+## Relaciones entre Entidades
+
+| Entidad A | Relación | Entidad B | Tipo |
+|-----------|----------|-----------|------|
+| Usuario | 1 ― * | Rol | ManyToMany |
+| Usuario | 1 ― * | Pedido | OneToMany |
+| Pedido | 1 ― * | DetallePedido | OneToMany (cascada) |
+| Producto | 1 ― * | DetallePedido | OneToMany |
+| Pedido | 1 ― 1 | Factura | OneToOne |
+
+## Patrón Arquitectónico
+
+**Spring MVC (Modelo-Vista-Controlador)** con capas adicionales:
+
+- **Modelo**: Entidades JPA (`@Entity`) en `model/`
+- **Repositorio**: Interfaces Spring Data JPA en `repository/`
+- **Servicio**: Lógica de negocio (`@Service`) en `service/`
+- **Controlador**: Manejadores de peticiones (`@Controller`) en `controller/`
+- **Vista**: Plantillas Thymeleaf en `templates/`
