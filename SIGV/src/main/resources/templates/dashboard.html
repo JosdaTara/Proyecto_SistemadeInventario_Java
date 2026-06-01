@@ -10,7 +10,6 @@
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-brand">
                 <div class="brand-icon"><i class="bi bi-box-seam-fill"></i></div>
@@ -25,37 +24,25 @@
                     <span class="icon"><i class="bi bi-grid"></i></span>
                     <span>Dashboard</span>
                 </a>
-                <a class="nav-item">
+                <a th:href="@{/productos}" class="nav-item">
                     <span class="icon"><i class="bi bi-box"></i></span>
                     <span>Productos</span>
                 </a>
-                <a class="nav-item">
+                <a th:href="@{/admin/pedidos}" class="nav-item">
                     <span class="icon"><i class="bi bi-cart"></i></span>
                     <span>Pedidos</span>
                 </a>
-                <a class="nav-item">
+                <a href="#" class="nav-item">
                     <span class="icon"><i class="bi bi-people"></i></span>
                     <span>Clientes</span>
                 </a>
-                <a class="nav-item">
+                <a href="#" class="nav-item">
                     <span class="icon"><i class="bi bi-file-earmark-text"></i></span>
                     <span>Facturas</span>
                 </a>
-                <div class="menu-label">Reportes</div>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-bar-chart"></i></span>
-                    <span>Ventas</span>
-                </a>
-                <a class="nav-item">
-                    <span class="icon"><i class="bi bi-archive"></i></span>
-                    <span>Inventario</span>
-                </a>
             </div>
         </nav>
-
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Topbar -->
             <header class="topbar">
                 <div class="page-title">
                     <h4>Dashboard</h4>
@@ -70,17 +57,14 @@
                     </form>
                 </div>
             </header>
-
-            <!-- Content -->
             <div class="content-area">
-                <!-- Stats Cards -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon blue">
                             <i class="bi bi-box"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>0</h3>
+                            <h3 th:text="${totalProductos}">0</h3>
                             <p>Productos registrados</p>
                         </div>
                     </div>
@@ -89,8 +73,8 @@
                             <i class="bi bi-cart-check"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>0</h3>
-                            <p>Pedidos activos</p>
+                            <h3 th:text="${totalPedidos}">0</h3>
+                            <p>Pedidos registrados</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -98,7 +82,7 @@
                             <i class="bi bi-people"></i>
                         </div>
                         <div class="stat-info">
-                            <h3>0</h3>
+                            <h3 th:text="${totalClientes}">0</h3>
                             <p>Clientes registrados</p>
                         </div>
                     </div>
@@ -113,12 +97,11 @@
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
                 <h5 class="fw-bold mb-3" style="color:#1a1a2e;">
                     <i class="bi bi-lightning-charge me-2"></i>Acciones Rapidas
                 </h5>
                 <div class="actions-grid">
-                    <a href="#" class="action-card">
+                    <a th:href="@{/productos/nuevo}" class="action-card">
                         <div class="icon"><i class="bi bi-box"></i></div>
                         <h6>Nuevo Producto</h6>
                     </a>
@@ -140,7 +123,6 @@
                     </a>
                 </div>
 
-                <!-- Recent Activity Table -->
                 <div class="table-container">
                     <div class="table-header">
                         <h5><i class="bi bi-clock-history me-2"></i>Actividad Reciente</h5>

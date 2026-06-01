@@ -28,6 +28,10 @@
                     <span class="icon"><i class="bi bi-box-seam"></i></span>
                     <span>Productos</span>
                 </a>
+                <a th:href="@{/cliente/carrito}" class="nav-item">
+                    <span class="icon"><i class="bi bi-cart"></i></span>
+                    <span>Carrito</span>
+                </a>
                 <a th:href="@{/cliente/pedidos}" class="nav-item">
                     <span class="icon"><i class="bi bi-cart-check"></i></span>
                     <span>Mis Pedidos</span>
@@ -103,7 +107,7 @@
                         <div class="icon"><i class="bi bi-box-seam"></i></div>
                         <h6>Ver Catalogo</h6>
                     </a>
-                    <a href="#" class="action-card">
+                    <a th:href="@{/cliente/productos}" class="action-card">
                         <div class="icon"><i class="bi bi-cart-plus"></i></div>
                         <h6>Hacer Pedido</h6>
                     </a>
@@ -142,9 +146,13 @@
                                     <span th:unless="${p.stock > 0}" class="badge" style="background:rgba(239,68,68,0.1);color:#EF4444;font-weight:500;">Agotado</span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-outline-custom btn-sm-custom">
-                                        <i class="bi bi-cart-plus"></i>
-                                    </button>
+                                    <form method="post" th:action="@{/cliente/carrito/agregar}">
+                                        <input type="hidden" name="productoId" th:value="${p.idProducto}">
+                                        <input type="hidden" name="cantidad" value="1">
+                                        <button type="submit" class="btn btn-outline-custom btn-sm-custom" th:disabled="${p.stock <= 0}">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(productos)}">

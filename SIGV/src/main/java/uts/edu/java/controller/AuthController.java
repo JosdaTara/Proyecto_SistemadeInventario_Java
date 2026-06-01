@@ -5,6 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import uts.edu.java.repository.PedidoRepository;
+import uts.edu.java.repository.ProductoRepository;
+import uts.edu.java.repository.UsuarioRepository;
 import uts.edu.java.service.UsuarioService;
 
 import java.security.Principal;
@@ -13,9 +16,18 @@ import java.security.Principal;
 public class AuthController {
 
     private final UsuarioService usuarioService;
+    private final ProductoRepository productoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PedidoRepository pedidoRepository;
 
-    public AuthController(UsuarioService usuarioService) {
+    public AuthController(UsuarioService usuarioService,
+                          ProductoRepository productoRepository,
+                          UsuarioRepository usuarioRepository,
+                          PedidoRepository pedidoRepository) {
         this.usuarioService = usuarioService;
+        this.productoRepository = productoRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     @GetMapping("/login")
@@ -44,6 +56,9 @@ public class AuthController {
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
         model.addAttribute("usuario", principal.getName());
+        model.addAttribute("totalProductos", productoRepository.count());
+        model.addAttribute("totalClientes", usuarioRepository.countByRolesNombre("CLIENTE"));
+        model.addAttribute("totalPedidos", pedidoRepository.count());
         return "dashboard";
     }
 }

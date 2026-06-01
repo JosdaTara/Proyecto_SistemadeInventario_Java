@@ -84,6 +84,10 @@
                     <span class="icon"><i class="bi bi-box-seam"></i></span>
                     <span>Productos</span>
                 </a>
+                <a th:href="@{/cliente/carrito}" class="nav-item">
+                    <span class="icon"><i class="bi bi-cart"></i></span>
+                    <span>Carrito</span>
+                </a>
                 <a th:href="@{/cliente/pedidos}" class="nav-item">
                     <span class="icon"><i class="bi bi-cart-check"></i></span>
                     <span>Mis Pedidos</span>
@@ -112,31 +116,46 @@
             </header>
 
             <div class="content-area">
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h5 class="fw-bold mb-1" style="color:var(--text);">Todos los Productos</h5>
                         <span style="color:var(--text-dim);font-size:0.9rem;" th:text="${#lists.size(productos)} + ' productos disponibles'"></span>
                     </div>
-                    <div class="d-flex gap-2">
-                        <input type="text" class="form-control form-control-sm" placeholder="Buscar producto..." style="width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;">
+                    <div class="d-flex gap-2 align-items-center">
+                        <a th:href="@{/cliente/carrito}" class="btn btn-outline-custom btn-sm-custom">
+                            <i class="bi bi-cart me-1"></i>Ver Carrito
+                        </a>
                     </div>
                 </div>
 
                 <div class="product-grid">
                     <div class="product-card" th:each="p : ${productos}">
-                        <div class="img-placeholder" style="background:linear-gradient(135deg, #f0fdf4, #dcfce7);">
-                            <i class="bi bi-box-seam"></i>
-                        </div>
-                        <h5 th:text="${p.nombre}">Producto</h5>
-                        <div class="category" th:text="${p.categoria}">Categoria</div>
-                        <div class="price" th:text="'$' + ${p.precio}">$0.00</div>
-                        <div class="description" th:text="${p.descripcion}">Descripcion</div>
-                        <div class="d-grid">
-                            <button class="btn btn-primary-custom btn-sm" th:disabled="${p.stock <= 0}">
-                                <i class="bi bi-cart-plus me-1"></i>
-                                <span th:text="${p.stock > 0} ? 'Agregar al carrito' : 'Agotado'">Agregar</span>
-                            </button>
-                        </div>
+                        <form method="post" th:action="@{/cliente/carrito/agregar}">
+                            <input type="hidden" name="productoId" th:value="${p.idProducto}">
+                            <input type="hidden" name="cantidad" value="1">
+                            <div class="img-placeholder" style="background:linear-gradient(135deg, #f0fdf4, #dcfce7);">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <h5 th:text="${p.nombre}">Producto</h5>
+                            <div class="category" th:text="${p.categoria}">Categoria</div>
+                            <div class="price" th:text="'$' + ${p.precio}">$0.00</div>
+                            <div class="description" th:text="${p.descripcion}">Descripcion</div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary-custom btn-sm" th:disabled="${p.stock <= 0}">
+                                    <i class="bi bi-cart-plus me-1"></i>
+                                    <span th:text="${p.stock > 0} ? 'Agregar al carrito' : 'Agotado'">Agregar</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                     <div th:if="${#lists.isEmpty(productos)}" class="text-center py-5" style="grid-column:1/-1;color:var(--text-dim);">
                         <i class="bi bi-inbox" style="font-size:3rem;display:block;margin-bottom:1rem;"></i>
@@ -146,5 +165,6 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

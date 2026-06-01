@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Pedidos - GesCom</title>
+    <title>Pedidos - GesCom</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link th:href="@{/css/style.css(v=${#dates.createNow().getTime()})}" rel="stylesheet">
@@ -12,44 +12,44 @@
     <div class="wrapper">
         <nav class="sidebar">
             <div class="sidebar-brand">
-                <div class="brand-icon"><i class="bi bi-shop"></i></div>
+                <div class="brand-icon"><i class="bi bi-box-seam-fill"></i></div>
                 <div>
                     <h5>GesCom</h5>
-                    <small>Cliente</small>
+                    <small>Gestion Comercial</small>
                 </div>
             </div>
             <div class="sidebar-menu">
-                <div class="menu-label">Menu</div>
-                <a th:href="@{/cliente/dashboard}" class="nav-item">
+                <div class="menu-label">Menu Principal</div>
+                <a th:href="@{/dashboard}" class="nav-item">
                     <span class="icon"><i class="bi bi-grid"></i></span>
                     <span>Dashboard</span>
                 </a>
-                <a th:href="@{/cliente/productos}" class="nav-item">
-                    <span class="icon"><i class="bi bi-box-seam"></i></span>
+                <a th:href="@{/productos}" class="nav-item">
+                    <span class="icon"><i class="bi bi-box"></i></span>
                     <span>Productos</span>
                 </a>
-                <a th:href="@{/cliente/carrito}" class="nav-item">
-                    <span class="icon"><i class="bi bi-cart"></i></span>
-                    <span>Carrito</span>
-                </a>
                 <a class="nav-item active">
-                    <span class="icon"><i class="bi bi-cart-check"></i></span>
-                    <span>Mis Pedidos</span>
+                    <span class="icon"><i class="bi bi-cart"></i></span>
+                    <span>Pedidos</span>
                 </a>
-                <a th:href="@{/cliente/perfil}" class="nav-item">
-                    <span class="icon"><i class="bi bi-person"></i></span>
-                    <span>Mi Perfil</span>
+                <a href="#" class="nav-item">
+                    <span class="icon"><i class="bi bi-people"></i></span>
+                    <span>Clientes</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon"><i class="bi bi-file-earmark-text"></i></span>
+                    <span>Facturas</span>
                 </a>
             </div>
         </nav>
         <div class="main-content">
             <header class="topbar">
                 <div class="page-title">
-                    <h4>Mis Pedidos</h4>
+                    <h4>Gestion de Pedidos</h4>
                 </div>
                 <div class="user-info">
-                    <span style="font-size:0.9rem;" th:text="'Hola, ' + ${usuario}"></span>
-                    <div class="user-avatar" th:text="${#strings.substring(usuario, 0, 1)}"></div>
+                    <span style="font-size:0.9rem;">Admin</span>
+                    <div class="user-avatar">A</div>
                     <form method="post" th:action="@{/logout}" class="m-0">
                         <button type="submit" class="btn btn-outline-custom btn-sm-custom">
                             <i class="bi bi-box-arrow-right me-1"></i>Salir
@@ -62,16 +62,15 @@
                     <span th:text="${success}"></span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
-                    <span th:text="${error}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-
+                <h5 class="fw-bold mb-4" style="color:var(--text);">
+                    <i class="bi bi-cart me-2"></i>Todos los Pedidos
+                </h5>
                 <div class="table-container">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th># Pedido</th>
+                                <th>#</th>
+                                <th>Cliente</th>
                                 <th>Fecha</th>
                                 <th>Total</th>
                                 <th>Estado</th>
@@ -81,6 +80,7 @@
                         <tbody>
                             <tr th:each="p : ${pedidos}">
                                 <td style="font-weight:600;" th:text="'#' + ${p.idPedido}">#1</td>
+                                <td th:text="${p.usuario.nombre}">Cliente</td>
                                 <td th:text="${#dates.format(p.fechaPedido, 'dd/MM/yyyy HH:mm')}">01/06/2026</td>
                                 <td style="font-weight:600;" th:text="'$' + ${p.total}">$0.00</td>
                                 <td>
@@ -91,15 +91,15 @@
                                     <span th:if="${p.estado == 'CANCELADO'}" class="badge" style="background:rgba(239,68,68,0.1);color:#EF4444;padding:0.35rem 0.75rem;font-weight:500;border-radius:8px;" th:text="${p.estado}">CANCELADO</span>
                                 </td>
                                 <td>
-                                    <a th:href="@{'/cliente/pedido/' + ${p.idPedido}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;">
+                                    <a th:href="@{'/admin/pedidos/' + ${p.idPedido}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;">
                                         <i class="bi bi-eye"></i>
                                     </a>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(pedidos)}">
-                                <td colspan="5" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     <i class="bi bi-inbox" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
-                                    No has realizado ningun pedido aun
+                                    No hay pedidos registrados
                                 </td>
                             </tr>
                         </tbody>
