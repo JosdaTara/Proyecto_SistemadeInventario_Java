@@ -4,86 +4,152 @@
 
 ```mermaid
 graph TB
-    subgraph "SISTEMA DE GESTION COMERCIAL"
-        Login1[Iniciar Sesion]
-        GProd[Gestionar Productos]
-        GPed[Gestionar Pedidos]
-        GCli[Gestionar Clientes]
-        GRep[Generar Reportes]
+    subgraph SISTEMA["SISTEMA DE GESTION COMERCIAL"]
+        direction TB
+        
+        subgraph Auth["Autenticacion"]
+            L1[("Iniciar Sesion")]
+        end
+        
+        subgraph Gestion["Gestion"]
+            P1[("Gestionar Productos")]
+            P2[("Gestionar Pedidos")]
+            P3[("Gestionar Clientes")]
+        end
+        
+        subgraph Reports["Reportes"]
+            R1[("Generar Reportes")]
+        end
     end
 
-    Admin((Administrador)) --> Login1
-    Admin --> GProd
-    Admin --> GPed
-    Admin --> GCli
-    Admin --> GRep
+    Admin((Administrador)) --> L1
+    Admin --> P1
+    Admin --> P2
+    Admin --> P3
+    Admin --> R1
 ```
 
 ## Cliente
 
 ```mermaid
 graph TB
-    subgraph "SISTEMA DE GESTION COMERCIAL"
-        Login2[Iniciar Sesion]
-        Catalogo[Consultar Catalogo]
-        Carrito[Gestionar Carrito]
-        Pedido[Realizar Pedido]
-        MisPed[Consultar Mis Pedidos]
-        Factura[Ver Factura]
-        Perfil[Gestionar Perfil]
+    subgraph SISTEMA["SISTEMA DE GESTION COMERCIAL"]
+        direction TB
+        
+        subgraph Auth2["Autenticacion"]
+            L2[("Iniciar Sesion")]
+        end
+        
+        subgraph Compras["Compras"]
+            C1[("Consultar Catalogo")]
+            C2[("Gestionar Carrito")]
+            C3[("Realizar Pedido")]
+        end
+        
+        subgraph Seguimiento["Seguimiento"]
+            S1[("Consultar Pedidos")]
+            S2[("Ver Factura")]
+        end
+        
+        subgraph PerfilSec["Perfil"]
+            U1[("Mi Perfil")]
+        end
     end
 
-    Cliente((Cliente)) --> Login2
-    Cliente --> Catalogo
-    Cliente --> Carrito
-    Cliente --> Pedido
-    Cliente --> MisPed
-    Cliente --> Factura
-    Cliente --> Perfil
+    Cliente((Cliente)) --> L2
+    Cliente --> C1
+    Cliente --> C2
+    Cliente --> C3
+    Cliente --> S1
+    Cliente --> S2
+    Cliente --> U1
 ```
 
-## Descripcion de Casos de Uso
+## Casos de Uso Detallados
 
 ### CU-01: Iniciar Sesion
-- **Actores**: Administrador, Cliente
-- **Descripcion**: El usuario ingresa email y contrasena. Spring Security valida con BCrypt y redirige segun el rol.
-- **Flujo**: Login --> Validacion --> `/dashboard` (admin) o `/cliente/dashboard` (cliente)
+```
+Actor:      Administrador, Cliente
+Precond:    Usuario no autenticado
+Flujo:      Ingresa email + password
+            Sistema valida con BCrypt
+            Redirige segun rol:
+              Admin  -> /dashboard
+              Cliente -> /cliente/dashboard
+Postcond:   Sesion iniciada
+```
 
-### CU-02: Gestionar Productos (Admin)
-- **Actor**: Administrador
-- **Descripcion**: CRUD completo en `/productos`: crear, editar, eliminar, listar productos con nombre, precio, stock y categoria.
-- **Flujo**: Listar --> Nuevo/Editar --> Guardar --> Redireccion
+### CU-02: Gestionar Productos (Administrador)
+```
+Actor:      Administrador
+Rutas:      GET/POST /productos
+Acciones:   Listar productos
+            Crear nuevo (nombre, precio, stock, categoria)
+            Editar existente
+            Eliminar producto
+Postcond:   BD actualizada
+```
 
 ### CU-03: Gestionar Carrito (Cliente)
-- **Actor**: Cliente
-- **Descripcion**: Agrega productos al carrito (sesion HTTP), actualiza cantidades o elimina items desde el catalogo.
-- **Flujo**: Catalogo --> Agregar --> Actualizar/Eliminar --> Checkout
+```
+Actor:      Cliente
+Rutas:      POST /cliente/carrito/agregar
+            POST /cliente/carrito/actualizar
+            POST /cliente/carrito/eliminar
+Almacen:    Sesion HTTP (carrito)
+Acciones:   Agregar producto con cantidad
+            Actualizar cantidad
+            Eliminar item
+```
 
 ### CU-04: Realizar Pedido (Cliente)
-- **Actor**: Cliente
-- **Descripcion**: Confirma el carrito. El sistema crea el Pedido con estado PENDIENTE, descuenta stock y genera Factura.
-- **Flujo**: Checkout --> Crear Pedido --> Descontar Stock --> Generar Factura
+```
+Actor:      Cliente
+Ruta:       POST /cliente/checkout
+Precond:    Carrito no vacio, stock suficiente
+Flujo:      Validar stock de cada producto
+            Crear Pedido (estado PENDIENTE)
+            Descontar stock de productos
+            Generar Factura (FAC-XXXXX)
+            Vaciar carrito
+Postcond:   Pedido + Factura creados
+```
 
-### CU-05: Gestionar Pedidos (Admin)
-- **Actor**: Administrador
-- **Descripcion**: Visualiza todos los pedidos en `/admin/pedidos` y cambia su estado.
-- **Flujo**: Listar --> Detalle --> Cambiar Estado (PENDIENTE/CONFIRMADO/ENVIADO/ENTREGADO/CANCELADO)
+### CU-05: Gestionar Pedidos (Administrador)
+```
+Actor:      Administrador
+Rutas:      GET /admin/pedidos
+            POST /admin/pedidos/{id}/estado
+Estados:    PENDIENTE -> CONFIRMADO -> ENVIADO -> ENTREGADO
+            Cualquier estado -> CANCELADO
+Acciones:   Ver lista de pedidos
+            Ver detalle del pedido
+            Cambiar estado
+```
 
 ### CU-06: Ver Factura
-- **Actor**: Cliente
-- **Descripcion**: Visualiza la factura generada automaticamente al crear el pedido, con opcion de impresion.
-- **Flujo**: Detalle del pedido --> Ver Factura --> Factura imprimible
+```
+Actor:      Cliente
+Ruta:       GET /cliente/factura/{id}
+Generacion: Automatica al crear pedido
+Formato:    Vista imprimible
+Datos:      Numero FAC-XXXXX
+            Datos del cliente
+            Detalle de productos
+            Total
+```
 
-## Matriz Actor vs Caso de Uso
+## Matriz de Relacion
 
-| Caso de Uso | Administrador | Cliente | Sistema |
-|-------------|:---:|:---:|:---:|
-| Iniciar Sesion | X | X | |
-| Gestionar Productos | X | | |
+| Funcionalidad | Admin | Cliente | Sistema |
+|---------------|:-----:|:-------:|:-------:|
+| Login | X | X | |
+| CRUD Productos | X | | |
 | Gestionar Pedidos | X | | |
 | Consultar Catalogo | | X | |
-| Gestionar Carrito | | X | |
+| Carrito de Compras | | X | |
 | Realizar Pedido | | X | |
-| Consultar Mis Pedidos | X | X | |
+| Ver Pedidos | X | X | |
 | Ver Factura | | X | |
 | Generar Factura | | | X |
+| Mi Perfil | | X | |
