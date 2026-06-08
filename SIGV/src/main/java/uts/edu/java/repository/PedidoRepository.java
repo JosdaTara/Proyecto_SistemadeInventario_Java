@@ -10,4 +10,7 @@ import java.util.List;
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     List<Pedido> findByUsuarioOrderByFechaPedidoDesc(Usuario usuario);
     List<Pedido> findAllByOrderByFechaPedidoDesc();
+    long countByEstado(String estado);
+    long countByUsuario(Usuario usuario);
+    long countByUsuarioAndEstado(Usuario usuario, String estado);
 }

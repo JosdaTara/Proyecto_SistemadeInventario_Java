@@ -74,6 +74,7 @@ public class AuthController {
         model.addAttribute("totalProductos", productoRepository.count());
         model.addAttribute("totalClientes", usuarioRepository.countByRolNombre("Cliente"));
         model.addAttribute("totalPedidos", pedidoRepository.count());
+        model.addAttribute("stockBajo", productoRepository.countByStockLessThanEqual(5));
         return "dashboard";
     }
 }

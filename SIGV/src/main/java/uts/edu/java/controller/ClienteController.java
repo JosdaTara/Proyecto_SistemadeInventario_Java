@@ -39,9 +39,15 @@ public class ClienteController {
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
         Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
+        long misPedidos = pedidoRepository.countByUsuario(usuario);
+        long pendientes = pedidoRepository.countByUsuarioAndEstado(usuario, "PENDIENTE");
+        long enviados = pedidoRepository.countByUsuarioAndEstado(usuario, "ENVIADO");
         model.addAttribute("usuario", usuario.getNombre());
         model.addAttribute("totalProductos", productoRepository.count());
-        model.addAttribute("productos", productoRepository.findByActivoTrue());
+        model.addAttribute("misPedidos", misPedidos);
+        model.addAttribute("pendientes", pendientes);
+        model.addAttribute("enviados", enviados);
+        model.addAttribute("productos", productoRepository.findTop6ByActivoTrueOrderByIdProductoDesc());
         return "cliente/dashboard";
     }
 
