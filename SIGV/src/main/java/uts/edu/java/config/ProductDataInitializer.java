@@ -1,12 +1,14 @@
 package uts.edu.java.config;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import uts.edu.java.model.Producto;
 import uts.edu.java.repository.ProductoRepository;
 import java.math.BigDecimal;
 
 @Component
+@Order(2)
 public class ProductDataInitializer implements CommandLineRunner {
 
     private final ProductoRepository productoRepository;
