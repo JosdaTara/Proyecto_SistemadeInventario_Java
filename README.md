@@ -134,7 +134,8 @@ spring.jpa.hibernate.ddl-auto=update
 - ✅ Tema verde corporativo profesional (primario #166534, secundario #22C55E)
 - ✅ CRUD completo de productos (Admin): crear, editar, eliminar, listar
 - ✅ Gestión de usuarios (Admin): crear usuarios con rol seleccionable (Cliente o Administrador)
-- ✅ Catálogo de productos con placeholders visuales y precios en pesos colombianos (COP)
+- ✅ Subida de imágenes para productos (formato JPG/PNG, máximo 5MB)
+- ✅ Catálogo de productos con imágenes reales o placeholder y precios en pesos colombianos (COP)
 - ✅ Carrito de compras en sesión (agregar, actualizar, eliminar)
 - ✅ Checkout: pedido se crea directo como **ENVIADO** con descuento de stock automático
 - ✅ Facturación automática al crear pedido, con vista imprimible (formato FAC-00001)

@@ -134,6 +134,7 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr>
+                                <th style="width:50px;"></th>
                                 <th>Producto</th>
                                 <th>Categoria</th>
                                 <th>Precio (COP)</th>
@@ -143,6 +144,12 @@
                         </thead>
                         <tbody>
                             <tr th:each="p : ${productos}">
+                                <td>
+                                    <img th:if="${p.imagenUrl != null}" th:src="@{${p.imagenUrl}}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;" alt="">
+                                    <div th:unless="${p.imagenUrl != null}" style="width:40px;height:40px;background:#f0fdf4;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:0.9rem;">
+                                        <i class="bi bi-box-seam"></i>
+                                    </div>
+                                </td>
                                 <td><strong th:text="${p.nombre}">Producto</strong></td>
                                 <td th:text="${p.categoria}">Categoria</td>
                                 <td th:text="'$' + ${#numbers.formatDecimal(p.precio, 0, 'COMMA', 0, 'POINT')}">$0</td>
@@ -161,7 +168,7 @@
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(productos)}">
-                                <td colspan="5" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     <i class="bi bi-inbox" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
                                     No hay productos disponibles aun
                                 </td>

@@ -86,7 +86,8 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>ID</th>
+                                <th style="width:60px;">Imagen</th>
+                                <th>#</th>
                                 <th>Nombre</th>
                                 <th>Categoria</th>
                                 <th>Precio (COP)</th>
@@ -97,6 +98,12 @@
                         </thead>
                         <tbody>
                             <tr th:each="p : ${productos}">
+                                <td>
+                                    <img th:if="${p.imagenUrl != null}" th:src="@{${p.imagenUrl}}" style="width:45px;height:45px;object-fit:cover;border-radius:8px;" alt="">
+                                    <div th:unless="${p.imagenUrl != null}" style="width:45px;height:45px;background:#f0fdf4;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:1.1rem;">
+                                        <i class="bi bi-box-seam"></i>
+                                    </div>
+                                </td>
                                 <td th:text="${p.idProducto}" style="font-weight:600;">1</td>
                                 <td><strong th:text="${p.nombre}">Producto</strong></td>
                                 <td><span class="badge" style="background:rgba(22,101,52,0.1);color:var(--primary);font-weight:500;" th:text="${p.categoria}">Cat</span></td>
