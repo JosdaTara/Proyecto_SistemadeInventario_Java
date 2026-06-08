@@ -34,9 +34,11 @@ classDiagram
 
     class Pedido {
         +Integer idPedido
+        +Usuario usuario
         +Date fechaPedido
         +String estado
         +BigDecimal total
+        +List detalle
     }
 
     class DetallePedido {
@@ -99,7 +101,26 @@ classDiagram
     class PedidoAdminController {
         +listar() String
         +detalle() String
-        +actualizarEstado() String
+    }
+
+    class ClienteAdminController {
+        +listar() String
+        +detalle() String
+    }
+
+    class FacturaAdminController {
+        +listar() String
+        +detalle() String
+    }
+
+    class ReporteController {
+        +reportes() String
+    }
+
+    class AdminUsuarioController {
+        +listar() String
+        +nuevoForm() String
+        +guardar() String
     }
 ```
 
@@ -131,11 +152,22 @@ classDiagram
     class PedidoRepository {
         +findByUsuarioOrderByFechaPedidoDesc() List
         +findAllByOrderByFechaPedidoDesc() List
+        +countByUsuario() long
+        +countByUsuarioAndEstado() long
+        +countByEstado() long
     }
 
     class FacturaRepository {
         +findByPedido() Factura
         +existsByPedido() boolean
+    }
+
+    class DetallePedidoRepository {
+        +findByPedido() List
+    }
+
+    class RolRepository {
+        +findByNombre() Rol
     }
 
     CustomUserDetailsService --> UsuarioRepository
@@ -147,7 +179,7 @@ classDiagram
 
 | Tabla | Relacion | Tabla | Tipo |
 |-------|----------|-------|------|
-| usuarios | M ― M | roles | `usuario_roles` |
+| usuarios | N ― 1 | roles | ManyToOne directo |
 | usuarios | 1 ― M | pedidos | Un cliente tiene muchos pedidos |
 | pedidos | 1 ― M | detalle_pedidos | Un pedido contiene varios items |
 | productos | 1 ― M | detalle_pedidos | Un producto aparece en varios detalles |
@@ -195,7 +227,7 @@ sequenceDiagram
     Ctrl->>Sess: Obtener items del carrito
     Sess-->>Ctrl: Lista de items
     Ctrl->>DB: Validar stock de cada item
-    Ctrl->>DB: Crear Pedido (PENDIENTE)
+    Ctrl->>DB: Crear Pedido (ENVIADO)
     Ctrl->>DB: Crear DetallePedido
     Ctrl->>DB: Descontar stock
     Ctrl->>DB: Generar Factura (FAC-XXXXX)
@@ -225,16 +257,12 @@ sequenceDiagram
     C-->>A: Redirect a /productos + mensaje
 ```
 
-### Ciclo de Vida del Pedido (Admin)
+### Ciclo de Vida del Pedido
 
 ```mermaid
 stateDiagram-v2
-    [*] --> PENDIENTE : Cliente realiza compra
-    PENDIENTE --> CONFIRMADO : Admin confirma
-    CONFIRMADO --> ENVIADO : Admin despacha
+    [*] --> ENVIADO : Cliente realiza compra
     ENVIADO --> ENTREGADO : Cliente recibe
-    PENDIENTE --> CANCELADO : Admin cancela
-    CONFIRMADO --> CANCELADO : Admin cancela
     ENVIADO --> CANCELADO : Admin cancela
     ENTREGADO --> [*]
     CANCELADO --> [*]

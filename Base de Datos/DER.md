@@ -15,19 +15,13 @@ erDiagram
         varchar password_hash
         tinyint activo
         datetime fecha_registro
+        int id_rol FK
     }
 
     roles {
         int id_rol PK
         varchar nombre
         varchar descripcion
-    }
-
-    usuario_roles }o--|| usuarios : "pertenece a"
-    usuario_roles }o--|| roles : "contiene"
-    usuario_roles {
-        int id_usuario FK
-        int id_rol FK
     }
 
     pedidos ||--o{ detalle_pedidos : "contiene"
@@ -114,7 +108,7 @@ erDiagram
 | id_pedido | INT (PK) | Identificador unico |
 | id_usuario | INT (FK) | Cliente que realiza el pedido |
 | fecha_pedido | DATETIME | Fecha de creacion |
-| estado | VARCHAR(20) | PENDIENTE, CONFIRMADO, ENVIADO, ENTREGADO, CANCELADO |
+| estado | VARCHAR(20) | ENVIADO, ENTREGADO, CANCELADO |
 | total | DECIMAL(10,2) | Monto total |
 
 ### detalle_pedidos
@@ -141,7 +135,7 @@ erDiagram
 
 | Tabla A | Cardinalidad | Tabla B | Explicacion |
 |---------|:-----------:|---------|-------------|
-| usuarios | M : M | roles | Un usuario puede tener varios roles y viceversa (tabla puente `usuario_roles`) |
+| usuarios | N : 1 | roles | Un usuario tiene un rol (ManyToOne directo, sin tabla puente) |
 | usuarios | 1 : M | pedidos | Un usuario (cliente) puede tener muchos pedidos |
 | pedidos | 1 : M | detalle_pedidos | Un pedido contiene varios items |
 | productos | 1 : M | detalle_pedidos | Un producto aparece en varios detalles |
