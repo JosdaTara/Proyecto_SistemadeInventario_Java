@@ -651,6 +651,24 @@ body {
     border-radius: 6px;
 }
 
+.badge-admin {
+    background: rgba(22, 101, 52, 0.1);
+    color: var(--primary);
+    font-weight: 500;
+    padding: 0.35em 0.75em;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.badge-client {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--secondary);
+    font-weight: 500;
+    padding: 0.35em 0.75em;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
 @media (max-width: 768px) {
     .auth-wrapper {
         flex-direction: column;

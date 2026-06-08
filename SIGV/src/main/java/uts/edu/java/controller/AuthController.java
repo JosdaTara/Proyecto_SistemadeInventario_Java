@@ -50,19 +50,15 @@ public class AuthController {
     @PostMapping("/registro-guardar")
     public String registrar(@RequestParam String nombre,
                             @RequestParam String email,
-                            @RequestParam String password,
-                            @RequestParam(defaultValue = "Cliente") String rol) {
+                            @RequestParam String password) {
         try {
-            usuarioService.registrarUsuario(nombre, email, password, rol);
+            usuarioService.registrarUsuario(nombre, email, password, "Cliente");
 
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password));
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-            boolean esCliente = auth.getAuthorities().stream()
-                    .anyMatch(a -> a.getAuthority().equals("ROLE_CLIENTE"));
-
-            return "redirect:" + (esCliente ? "/cliente/dashboard" : "/dashboard");
+            return "redirect:/cliente/dashboard";
         } catch (Exception e) {
             return "redirect:/registro?error=" + e.getMessage();
         }
