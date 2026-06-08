@@ -163,50 +163,55 @@ public class ClienteController {
     @SuppressWarnings("unchecked")
     @PostMapping("/checkout")
     public String checkout(HttpSession session, Principal principal, RedirectAttributes ra) {
-        List<Map<String, Object>> items = (List<Map<String, Object>>) session.getAttribute("carrito");
-        if (items == null || items.isEmpty()) {
-            ra.addFlashAttribute("error", "El carrito está vacío");
-            return "redirect:/cliente/carrito";
-        }
-
-        Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
-        Pedido pedido = new Pedido();
-        pedido.setUsuario(usuario);
-        pedido.setEstado("PENDIENTE");
-
-        BigDecimal total = BigDecimal.ZERO;
-        List<DetallePedido> detalleList = new ArrayList<>();
-
-        for (Map<String, Object> item : items) {
-            Integer prodId = (Integer) item.get("productoId");
-            Integer cantidad = (Integer) item.get("cantidad");
-            Producto producto = productoRepository.findById(prodId).orElse(null);
-            if (producto == null || cantidad > producto.getStock()) {
-                ra.addFlashAttribute("error", "Stock insuficiente para " + item.get("nombre"));
+        try {
+            List<Map<String, Object>> items = (List<Map<String, Object>>) session.getAttribute("carrito");
+            if (items == null || items.isEmpty()) {
+                ra.addFlashAttribute("error", "El carrito está vacío");
                 return "redirect:/cliente/carrito";
             }
-            DetallePedido detalle = new DetallePedido(pedido, producto, cantidad, producto.getPrecio());
-            detalleList.add(detalle);
-            total = total.add(detalle.getSubtotal());
 
-            producto.setStock(producto.getStock() - cantidad);
-            productoRepository.save(producto);
+            Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
+            Pedido pedido = new Pedido();
+            pedido.setUsuario(usuario);
+            pedido.setEstado("PENDIENTE");
+
+            BigDecimal total = BigDecimal.ZERO;
+            List<DetallePedido> detalleList = new ArrayList<>();
+
+            for (Map<String, Object> item : items) {
+                Integer prodId = (Integer) item.get("productoId");
+                Integer cantidad = (Integer) item.get("cantidad");
+                Producto producto = productoRepository.findById(prodId).orElse(null);
+                if (producto == null || cantidad > producto.getStock()) {
+                    ra.addFlashAttribute("error", "Stock insuficiente para " + item.get("nombre"));
+                    return "redirect:/cliente/carrito";
+                }
+                DetallePedido detalle = new DetallePedido(pedido, producto, cantidad, producto.getPrecio());
+                detalleList.add(detalle);
+                total = total.add(detalle.getSubtotal());
+
+                producto.setStock(producto.getStock() - cantidad);
+                productoRepository.save(producto);
+            }
+
+            pedido.setTotal(total);
+            pedido.setDetalle(detalleList);
+            pedido = pedidoRepository.saveAndFlush(pedido);
+
+            Factura factura = new Factura();
+            factura.setPedido(pedido);
+            factura.setNumeroFactura("FAC-" + String.format("%05d", pedido.getIdPedido()));
+            factura.setTotal(total);
+            factura.setMetodoPago("EFECTIVO");
+            facturaRepository.saveAndFlush(factura);
+
+            session.removeAttribute("carrito");
+            ra.addFlashAttribute("success", "Pedido #" + pedido.getIdPedido() + " creado exitosamente");
+            return "redirect:/cliente/pedidos";
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al procesar pedido: " + e.getMessage());
+            return "redirect:/cliente/carrito";
         }
-
-        pedido.setTotal(total);
-        pedido.setDetalle(detalleList);
-        pedido = pedidoRepository.save(pedido);
-
-        Factura factura = new Factura();
-        factura.setPedido(pedido);
-        factura.setNumeroFactura("FAC-" + String.format("%05d", pedido.getIdPedido()));
-        factura.setTotal(total);
-        factura.setMetodoPago("EFECTIVO");
-        facturaRepository.save(factura);
-
-        session.removeAttribute("carrito");
-        ra.addFlashAttribute("success", "Pedido #" + pedido.getIdPedido() + " creado exitosamente");
-        return "redirect:/cliente/pedidos";
     }
 
     // --- Mis Pedidos ---

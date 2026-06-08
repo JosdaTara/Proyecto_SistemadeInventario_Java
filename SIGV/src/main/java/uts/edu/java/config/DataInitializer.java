@@ -27,17 +27,21 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (rolRepository.count() == 0) {
-            Rol adminRol = rolRepository.save(new Rol("Administrador"));
-            Rol clienteRol = rolRepository.save(new Rol("Cliente"));
-            System.out.println("Roles creados: Administrador, Cliente");
+        Rol adminRol = rolRepository.findByNombre("Administrador").orElseGet(() -> {
+            Rol r = rolRepository.save(new Rol("Administrador"));
+            System.out.println("Rol Administrador creado");
+            return r;
+        });
+        if (rolRepository.findByNombre("Cliente").isEmpty()) {
+            rolRepository.save(new Rol("Cliente"));
+            System.out.println("Rol Cliente creado");
+        }
 
-            if (!usuarioRepository.existsByEmail("admin@admin.com")) {
-                Usuario admin = new Usuario("Administrador", "admin@admin.com",
-                        passwordEncoder.encode("admin123"), adminRol);
-                usuarioRepository.save(admin);
-                System.out.println("Admin creado: admin@admin.com / admin123");
-            }
+        if (!usuarioRepository.existsByEmail("admin@admin.com")) {
+            Usuario admin = new Usuario("Administrador", "admin@admin.com",
+                    passwordEncoder.encode("admin123"), adminRol);
+            usuarioRepository.save(admin);
+            System.out.println("Admin creado: admin@admin.com / admin123");
         }
     }
 }

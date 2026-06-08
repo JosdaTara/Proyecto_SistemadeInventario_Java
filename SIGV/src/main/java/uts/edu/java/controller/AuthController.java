@@ -1,9 +1,12 @@
 package uts.edu.java.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,13 +58,17 @@ public class AuthController {
     @PostMapping("/registro-guardar")
     public String registrar(@RequestParam String nombre,
                             @RequestParam String email,
-                            @RequestParam String password) {
+                            @RequestParam String password,
+                            HttpServletRequest request) {
         try {
             usuarioService.registrarUsuario(nombre, email, password, "Cliente");
 
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password));
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            SecurityContext sc = SecurityContextHolder.getContext();
+            sc.setAuthentication(auth);
+            request.getSession(true).setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
 
             return "redirect:/cliente/dashboard";
         } catch (Exception e) {
