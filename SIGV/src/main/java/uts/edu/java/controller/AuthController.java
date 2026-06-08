@@ -37,6 +37,11 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/login";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
