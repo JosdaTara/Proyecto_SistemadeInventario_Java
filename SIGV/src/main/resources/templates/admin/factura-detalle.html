@@ -116,17 +116,17 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Producto</th>
-                                <th>Precio Unit.</th>
+                                <th>Precio Unit. (COP)</th>
                                 <th>Cantidad</th>
-                                <th class="text-end">Subtotal</th>
+                                <th class="text-end">Subtotal (COP)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="d : ${factura.pedido.detalle}">
                                 <td><strong th:text="${d.producto.nombre}">Producto</strong></td>
-                                <td th:text="'$' + ${d.precioUnitario}">$0.00</td>
+                                <td th:text="'$' + ${#numbers.formatDecimal(d.precioUnitario, 0, 'COMMA', 0, 'POINT')}">$0</td>
                                 <td th:text="${d.cantidad}">1</td>
-                                <td class="text-end" style="font-weight:600;" th:text="'$' + ${d.subtotal}">$0.00</td>
+                                <td class="text-end" style="font-weight:600;" th:text="'$' + ${#numbers.formatDecimal(d.subtotal, 0, 'COMMA', 0, 'POINT')}">$0</td>
                             </tr>
                         </tbody>
                     </table>
@@ -134,7 +134,7 @@
                     <div class="d-flex justify-content-end mt-4 pt-3" style="border-top:1px solid var(--border);">
                         <div style="text-align:right;">
                             <div style="font-size:0.9rem;color:var(--text-dim);">Total</div>
-                            <div style="font-size:2rem;font-weight:800;color:var(--primary);" th:text="'$' + ${factura.total}">$0.00</div>
+                            <div style="font-size:2rem;font-weight:800;color:var(--primary);" th:text="'$' + ${#numbers.formatDecimal(factura.total, 0, 'COMMA', 0, 'POINT')}">$0</div>
                         </div>
                     </div>
 

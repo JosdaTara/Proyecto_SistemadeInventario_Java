@@ -131,7 +131,7 @@
                             <tr>
                                 <th>Producto</th>
                                 <th>Categoria</th>
-                                <th>Precio</th>
+                                <th>Precio (COP)</th>
                                 <th>Stock</th>
                                 <th></th>
                             </tr>
@@ -140,7 +140,7 @@
                             <tr th:each="p : ${productos}">
                                 <td><strong th:text="${p.nombre}">Producto</strong></td>
                                 <td th:text="${p.categoria}">Categoria</td>
-                                <td th:text="'$' + ${p.precio}">$0.00</td>
+                                <td th:text="'$' + ${#numbers.formatDecimal(p.precio, 0, 'COMMA', 0, 'POINT')}">$0</td>
                                 <td>
                                     <span th:if="${p.stock > 0}" class="badge" style="background:rgba(34,197,94,0.1);color:#22C55E;font-weight:500;" th:text="${p.stock + ' en stock'}">stock</span>
                                     <span th:unless="${p.stock > 0}" class="badge" style="background:rgba(239,68,68,0.1);color:#EF4444;font-weight:500;">Agotado</span>

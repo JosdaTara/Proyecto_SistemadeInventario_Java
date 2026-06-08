@@ -75,23 +75,23 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Producto</th>
-                                <th>Precio Unit.</th>
+                                <th>Precio Unit. (COP)</th>
                                 <th>Cantidad</th>
-                                <th>Subtotal</th>
+                                <th>Subtotal (COP)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="d : ${pedido.detalle}">
                                 <td><strong th:text="${d.producto.nombre}">Producto</strong></td>
-                                <td th:text="'$' + ${d.precioUnitario}">$0.00</td>
+                                <td th:text="'$' + ${#numbers.formatDecimal(d.precioUnitario, 0, 'COMMA', 0, 'POINT')}">$0</td>
                                 <td th:text="${d.cantidad}">1</td>
-                                <td style="font-weight:600;" th:text="'$' + ${d.subtotal}">$0.00</td>
+                                <td style="font-weight:600;" th:text="'$' + ${#numbers.formatDecimal(d.subtotal, 0, 'COMMA', 0, 'POINT')}">$0</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="d-flex justify-content-end mt-3">
-                    <h5 style="color:var(--primary);font-weight:800;" th:text="'Total: $' + ${pedido.total}">$0.00</h5>
+                    <h5 style="color:var(--primary);font-weight:800;" th:text="'Total: $' + ${#numbers.formatDecimal(pedido.total, 0, 'COMMA', 0, 'POINT')}">$0</h5>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <a th:href="@{/cliente/pedidos}" class="btn btn-outline-custom" style="border-radius:8px;">

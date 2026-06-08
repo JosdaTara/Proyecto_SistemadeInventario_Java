@@ -77,7 +77,7 @@
                                 <th>Pedido</th>
                                 <th>Cliente</th>
                                 <th>Fecha</th>
-                                <th>Total</th>
+                                <th>Total (COP)</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -87,7 +87,7 @@
                                 <td th:text="'#' + ${f.pedido.idPedido}">#1</td>
                                 <td th:text="${f.pedido.usuario.nombre}">Cliente</td>
                                 <td th:text="${#dates.format(f.fechaEmision, 'dd/MM/yyyy HH:mm')}">01/06/2026</td>
-                                <td style="font-weight:600;" th:text="'$' + ${f.total}">$0.00</td>
+                                <td style="font-weight:600;" th:text="'$' + ${#numbers.formatDecimal(f.total, 0, 'COMMA', 0, 'POINT')}">$0</td>
                                 <td>
                                     <a th:href="@{'/admin/facturas/' + ${f.idFactura}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;">
                                         <i class="bi bi-eye"></i>

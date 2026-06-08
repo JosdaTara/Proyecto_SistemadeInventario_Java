@@ -147,7 +147,7 @@
                             </div>
                             <h5 th:text="${p.nombre}">Producto</h5>
                             <div class="category" th:text="${p.categoria}">Categoria</div>
-                            <div class="price" th:text="'$' + ${p.precio}">$0.00</div>
+                            <div class="price" th:text="'$' + ${#numbers.formatDecimal(p.precio, 0, 'COMMA', 0, 'POINT')}">$0</div>
                             <div class="description" th:text="${p.descripcion}">Descripcion</div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary-custom btn-sm" th:disabled="${p.stock <= 0}">
