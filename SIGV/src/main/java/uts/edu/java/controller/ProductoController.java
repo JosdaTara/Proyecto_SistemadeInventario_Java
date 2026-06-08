@@ -21,7 +21,7 @@ import java.util.UUID;
 public class ProductoController {
 
     private final ProductoRepository productoRepository;
-    private static final String UPLOAD_DIR = "src/main/resources/static/img/productos/";
+    private static final String UPLOAD_DIR = "uploads/productos/";
 
     public ProductoController(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
