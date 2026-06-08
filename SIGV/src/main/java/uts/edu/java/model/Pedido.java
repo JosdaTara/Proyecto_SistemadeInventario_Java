@@ -23,7 +23,7 @@ public class Pedido {
     private Date fechaPedido;
 
     @Column(nullable = false, length = 20)
-    private String estado = "PENDIENTE";
+    private String estado = "ENVIADO";
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
@@ -36,7 +36,7 @@ public class Pedido {
     @PrePersist
     protected void onCreate() {
         fechaPedido = new Date();
-        if (estado == null) estado = "PENDIENTE";
+        if (estado == null) estado = "ENVIADO";
     }
 
     public Integer getIdPedido() { return idPedido; }

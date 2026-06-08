@@ -40,12 +40,10 @@ public class ClienteController {
     public String dashboard(Principal principal, Model model) {
         Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
         long misPedidos = pedidoRepository.countByUsuario(usuario);
-        long pendientes = pedidoRepository.countByUsuarioAndEstado(usuario, "PENDIENTE");
         long enviados = pedidoRepository.countByUsuarioAndEstado(usuario, "ENVIADO");
         model.addAttribute("usuario", usuario.getNombre());
         model.addAttribute("totalProductos", productoRepository.count());
         model.addAttribute("misPedidos", misPedidos);
-        model.addAttribute("pendientes", pendientes);
         model.addAttribute("enviados", enviados);
         model.addAttribute("productos", productoRepository.findTop6ByActivoTrueOrderByIdProductoDesc());
         return "cliente/dashboard";
@@ -173,7 +171,7 @@ public class ClienteController {
             Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
-            pedido.setEstado("PENDIENTE");
+            pedido.setEstado("ENVIADO");
 
             BigDecimal total = BigDecimal.ZERO;
             List<DetallePedido> detalleList = new ArrayList<>();

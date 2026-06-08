@@ -26,8 +26,6 @@ public class ReporteController {
     @GetMapping
     public String reportes(Model model) {
         long totalPedidos = pedidoRepository.count();
-        long pendientes = pedidoRepository.countByEstado("PENDIENTE");
-        long confirmados = pedidoRepository.countByEstado("CONFIRMADO");
         long enviados = pedidoRepository.countByEstado("ENVIADO");
         long entregados = pedidoRepository.countByEstado("ENTREGADO");
         long cancelados = pedidoRepository.countByEstado("CANCELADO");
@@ -35,8 +33,6 @@ public class ReporteController {
         long totalProductos = productoRepository.count();
 
         model.addAttribute("totalPedidos", totalPedidos);
-        model.addAttribute("pendientes", pendientes);
-        model.addAttribute("confirmados", confirmados);
         model.addAttribute("enviados", enviados);
         model.addAttribute("entregados", entregados);
         model.addAttribute("cancelados", cancelados);

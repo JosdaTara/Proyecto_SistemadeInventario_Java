@@ -97,8 +97,6 @@
                                             <td th:text="${#dates.format(p.fechaPedido, 'dd/MM/yyyy')}">01/06/2026</td>
                                             <td th:text="'$' + ${#numbers.formatDecimal(p.total, 0, 'COMMA', 0, 'POINT')}">$0</td>
                                             <td>
-                                                <span th:if="${p.estado == 'PENDIENTE'}" class="badge" style="background:rgba(245,158,11,0.1);color:#F59E0B;padding:0.35rem 0.75rem;font-weight:500;border-radius:8px;">PENDIENTE</span>
-                                                <span th:if="${p.estado == 'CONFIRMADO'}" class="badge" style="background:rgba(59,130,246,0.1);color:#3B82F6;padding:0.35rem 0.75rem;font-weight:500;border-radius:8px;">CONFIRMADO</span>
                                                 <span th:if="${p.estado == 'ENVIADO'}" class="badge" style="background:rgba(139,92,246,0.1);color:#8B5CF6;padding:0.35rem 0.75rem;font-weight:500;border-radius:8px;">ENVIADO</span>
                                                 <span th:if="${p.estado == 'ENTREGADO'}" class="badge" style="background:rgba(34,197,94,0.1);color:#22C55E;padding:0.35rem 0.75rem;font-weight:500;border-radius:8px;">ENTREGADO</span>
                                                 <span th:if="${p.estado == 'CANCELADO'}" class="badge" style="background:rgba(239,68,68,0.1);color:#EF4444;padding:0.35rem 0.75rem;font-weight:500;border-radius:8px;">CANCELADO</span>

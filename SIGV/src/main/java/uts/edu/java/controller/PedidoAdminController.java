@@ -35,17 +35,4 @@ public class PedidoAdminController {
         return "admin/pedido-detalle";
     }
 
-    @PostMapping("/{id}/estado")
-    public String actualizarEstado(@PathVariable Integer id,
-                                   @RequestParam String estado,
-                                   RedirectAttributes ra) {
-        Optional<Pedido> opt = pedidoRepository.findById(id);
-        if (opt.isPresent()) {
-            Pedido p = opt.get();
-            p.setEstado(estado);
-            pedidoRepository.save(p);
-            ra.addFlashAttribute("success", "Pedido #" + p.getIdPedido() + " actualizado a " + estado);
-        }
-        return "redirect:/admin/pedidos";
-    }
 }
