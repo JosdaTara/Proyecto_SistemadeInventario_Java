@@ -23,8 +23,8 @@ PROYECTO/
 │   ├── 📁 src/
 │   │   ├── 📁 main/
 │   │   │   ├── 📁 java/uts/edu/java/
-│   │   │   │   ├── 📁 config/        # SecurityConfig, DataInitializer, AuthSuccessHandler
-│   │   │   │   ├── 📁 controller/    # AuthController, ClienteController, ProductoController, PedidoAdminController
+│   │   │   │   ├── 📁 config/        # SecurityConfig, DataInitializer(@Order 1), ProductDataInitializer(@Order 2), CustomAuthenticationSuccessHandler
+│   │   │   │   ├── 📁 controller/    # AuthController, ClienteController, ProductoController, PedidoAdminController, ClienteAdminController, FacturaAdminController, ReporteController, AdminUsuarioController
 │   │   │   │   ├── 📁 model/         # Usuario, Rol, Producto, Pedido, DetallePedido, Factura
 │   │   │   │   ├── 📁 repository/    # UsuarioRepository, RolRepository, ProductoRepository, PedidoRepository, DetallePedidoRepository, FacturaRepository
 │   │   │   │   ├── 📁 service/       # UsuarioService, CustomUserDetailsService
@@ -37,7 +37,15 @@ PROYECTO/
 │   │   │       │   ├── dashboard.html# Panel de administrador
 │   │   │       │   ├── 📁 admin/     # Gestión admin
 │   │   │       │   │   ├── pedidos.html
-│   │   │       │   │   └── pedido-detalle.html
+│   │   │       │   │   ├── pedido-detalle.html
+│   │   │       │   │   ├── clientes.html
+│   │   │       │   │   ├── cliente-detalle.html
+│   │   │       │   │   ├── facturas.html
+│   │   │       │   │   ├── factura-detalle.html
+│   │   │       │   │   ├── reportes.html
+│   │   │       │   │   └── 📁 usuarios/
+│   │   │       │   │       ├── listar.html
+│   │   │       │   │       └── form.html
 │   │   │       │   ├── 📁 productos/ # CRUD de productos
 │   │   │       │   │   ├── listar.html
 │   │   │       │   │   └── form.html
@@ -80,7 +88,7 @@ PROYECTO/
 
 | Rol | Acceso | Descripción |
 |-----|--------|-------------|
-| **ADMINISTRADOR** | `/dashboard`, `/productos`, `/admin/pedidos` | Gestión de inventario, productos, pedidos, ventas, facturación |
+| **ADMINISTRADOR** | `/dashboard`, `/productos`, `/admin/pedidos`, `/admin/clientes`, `/admin/facturas`, `/admin/reportes`, `/admin/usuarios` | Gestión de inventario, productos, pedidos, clientes, facturación, reportes y usuarios |
 | **CLIENTE** | `/cliente/dashboard`, `/cliente/productos`, `/cliente/carrito`, `/cliente/pedidos`, `/cliente/perfil` | Catálogo de productos, carrito, pedidos, perfil y facturas |
 
 ## Usuarios por Defecto
@@ -118,17 +126,23 @@ spring.jpa.hibernate.ddl-auto=update
 
 ## Funcionalidades
 
-- ✅ Login / Registro con validación y BCrypt
-- ✅ Roles: Administrador y Cliente con redirección automática
+- ✅ Login / Registro con validación y BCrypt (registro siempre como Cliente)
+- ✅ Redirección automática según rol (ADMIN → `/dashboard`, CLIENTE → `/cliente/dashboard`)
 - ✅ Dashboard Administrador con stats dinámicos y acciones rápidas
-- ✅ Dashboard Cliente con catálogo de productos destacados
-- ✅ Vista de perfil de usuario con datos personales
-- ✅ Tema verde corporativo profesional
+- ✅ Dashboard Cliente con catálogo de productos destacados y stats de pedidos
+- ✅ Vista de perfil de usuario con datos personales y fecha de registro
+- ✅ Tema verde corporativo profesional (primario #166534, secundario #22C55E)
 - ✅ CRUD completo de productos (Admin): crear, editar, eliminar, listar
+- ✅ Gestión de usuarios (Admin): crear usuarios con rol seleccionable (Cliente o Administrador)
+- ✅ Catálogo de productos con placeholders visuales y precios en pesos colombianos (COP)
 - ✅ Carrito de compras en sesión (agregar, actualizar, eliminar)
-- ✅ Checkout: pedido con descuento de stock automático
-- ✅ Historial de pedidos con estados (Pendiente → Confirmado → Enviado → Entregado → Cancelado)
-- ✅ Gestión de pedidos (Admin): ver detalle y cambiar estado
-- ✅ Facturación automática al crear pedido, con vista imprimible
-- ✅ Catálogo de productos con placeholders visuales
+- ✅ Checkout: pedido se crea directo como **ENVIADO** con descuento de stock automático
+- ✅ Facturación automática al crear pedido, con vista imprimible (formato FAC-00001)
+- ✅ Historial de pedidos del cliente con detalle y factura
+- ✅ Listado de pedidos (Admin): ver todos los pedidos con detalle
+- ✅ Listado de clientes (Admin): ver perfil del cliente y sus pedidos
+- ✅ Listado de facturas (Admin): ver todas las facturas emitidas
+- ✅ Reportes (Admin): estadísticas de pedidos por estado y control de stock bajo
 - ✅ Seguridad por ruta según rol (Spring Security)
+- ✅ Cache-busting CSS con timestamp, Thymeleaf cache desactivado
+- ✅ Precios semilla con valores COP realistas ($4,500,000, $350,000, $85,000, etc.)
