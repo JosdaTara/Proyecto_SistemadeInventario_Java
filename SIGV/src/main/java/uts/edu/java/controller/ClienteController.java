@@ -195,13 +195,13 @@ public class ClienteController {
 
         pedido.setTotal(total);
         pedido.setDetalle(detalleList);
-        pedidoRepository.save(pedido);
+        pedido = pedidoRepository.save(pedido);
 
-        // Generar factura automaticamente
         Factura factura = new Factura();
         factura.setPedido(pedido);
         factura.setNumeroFactura("FAC-" + String.format("%05d", pedido.getIdPedido()));
         factura.setTotal(total);
+        factura.setMetodoPago("EFECTIVO");
         facturaRepository.save(factura);
 
         session.removeAttribute("carrito");
