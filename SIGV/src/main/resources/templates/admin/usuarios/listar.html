@@ -70,6 +70,14 @@
                     Usuario creado exitosamente
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
+                <div th:if="${param.updated}" class="alert alert-success alert-dismissible fade show">
+                    Usuario actualizado exitosamente
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${param.deleted}" class="alert alert-success alert-dismissible fade show">
+                    Usuario eliminado exitosamente
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-bold mb-0" style="color:var(--text);">
                         <i class="bi bi-person-gear me-2"></i>Todos los Usuarios
@@ -86,6 +94,7 @@
                                 <th>Nombre</th>
                                 <th>Email</th>
                                 <th>Rol</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -97,9 +106,24 @@
                                     <span class="badge" th:classappend="${u.rol.nombre == 'Administrador'} ? 'badge-admin' : 'badge-client'"
                                           th:text="${u.rol.nombre}">Rol</span>
                                 </td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <a th:href="@{'/admin/usuarios/editar/' + ${u.idUsuario}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;"
+                                           title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form method="post" th:action="@{'/admin/usuarios/eliminar/' + ${u.idUsuario}}"
+                                              onsubmit="return confirm('¿Eliminar este usuario?')">
+                                            <button type="submit" class="btn btn-sm" style="background:rgba(239,68,68,0.1);color:#EF4444;border:none;border-radius:8px;"
+                                                    title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(usuarios)}">
-                                <td colspan="4" class="text-center text-muted py-4">
+                                <td colspan="5" class="text-center text-muted py-4">
                                     <i class="bi bi-inbox" style="font-size:1.5rem;display:block;margin-bottom:0.5rem;"></i>
                                     No hay usuarios registrados
                                 </td>

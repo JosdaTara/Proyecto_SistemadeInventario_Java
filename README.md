@@ -40,6 +40,7 @@ PROYECTO/
 │   │   │       │   │   ├── pedido-detalle.html
 │   │   │       │   │   ├── clientes.html
 │   │   │       │   │   ├── cliente-detalle.html
+│   │   │       │   │   ├── cliente-form.html
 │   │   │       │   │   ├── facturas.html
 │   │   │       │   │   ├── factura-detalle.html
 │   │   │       │   │   ├── reportes.html
@@ -88,7 +89,7 @@ PROYECTO/
 
 | Rol | Acceso | Descripción |
 |-----|--------|-------------|
-| **ADMINISTRADOR** | `/dashboard`, `/productos`, `/admin/pedidos`, `/admin/clientes`, `/admin/facturas`, `/admin/reportes`, `/admin/usuarios` | Gestión de inventario, productos, pedidos, clientes, facturación, reportes y usuarios |
+| **ADMINISTRADOR** | `/dashboard`, `/productos`, `/admin/pedidos`, `/admin/clientes`, `/admin/facturas`, `/admin/reportes`, `/admin/usuarios` | Gestión de inventario, productos, pedidos (cambio estado), clientes (CRUD), facturación, reportes y usuarios (CRUD) |
 | **CLIENTE** | `/cliente/dashboard`, `/cliente/productos`, `/cliente/carrito`, `/cliente/pedidos`, `/cliente/perfil` | Catálogo de productos, carrito, pedidos, perfil y facturas |
 
 ## Usuarios por Defecto
@@ -133,7 +134,7 @@ spring.jpa.hibernate.ddl-auto=update
 - ✅ Vista de perfil de usuario con datos personales y fecha de registro
 - ✅ Tema verde corporativo profesional (primario #166534, secundario #22C55E)
 - ✅ CRUD completo de productos (Admin): crear, editar, eliminar, listar
-- ✅ Gestión de usuarios (Admin): crear usuarios con rol seleccionable (Cliente o Administrador)
+- ✅ Gestión de usuarios (Admin): CRUD completo — listar, crear, editar y eliminar usuarios con rol seleccionable (Cliente o Administrador)
 - ✅ Subida de imágenes para productos (formato JPG/PNG, máximo 5MB)
 - ✅ Catálogo de productos con imágenes reales o placeholder y precios en pesos colombianos (COP)
 - ✅ Carrito de compras en sesión (agregar, actualizar, eliminar)
@@ -141,7 +142,7 @@ spring.jpa.hibernate.ddl-auto=update
 - ✅ Facturación automática al crear pedido, con vista imprimible (formato FAC-00001)
 - ✅ Historial de pedidos del cliente con detalle y factura
 - ✅ Listado de pedidos (Admin): ver todos los pedidos con detalle
-- ✅ Listado de clientes (Admin): ver perfil del cliente y sus pedidos
+- ✅ Gestión de clientes (Admin): CRUD completo — listar, ver detalle con pedidos, editar datos y eliminar clientes
 - ✅ Listado de facturas (Admin): ver todas las facturas emitidas
 - ✅ Reportes (Admin): estadísticas de pedidos por estado y control de stock bajo
 - ✅ Seguridad por ruta según rol (Spring Security)

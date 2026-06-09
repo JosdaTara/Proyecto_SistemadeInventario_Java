@@ -66,6 +66,14 @@
                 </div>
             </header>
             <div class="content-area">
+                <div th:if="${param.updated}" class="alert alert-success alert-dismissible fade show">
+                    Cliente actualizado exitosamente
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${param.deleted}" class="alert alert-success alert-dismissible fade show">
+                    Cliente eliminado exitosamente
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 <h5 class="fw-bold mb-4" style="color:var(--text);">
                     <i class="bi bi-people me-2"></i>Clientes Registrados
                 </h5>
@@ -92,9 +100,23 @@
                                     <span th:unless="${c.activo}" class="badge" style="background:rgba(239,68,68,0.1);color:#EF4444;font-weight:500;">Inactivo</span>
                                 </td>
                                 <td>
-                                    <a th:href="@{'/admin/clientes/' + ${c.idUsuario}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                    <div class="d-flex gap-1">
+                                        <a th:href="@{'/admin/clientes/' + ${c.idUsuario}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;"
+                                           title="Ver">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a th:href="@{'/admin/clientes/editar/' + ${c.idUsuario}}" class="btn btn-sm" style="background:rgba(22,101,52,0.1);color:var(--primary);border:none;border-radius:8px;"
+                                           title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form method="post" th:action="@{'/admin/clientes/eliminar/' + ${c.idUsuario}}"
+                                              onsubmit="return confirm('¿Eliminar este cliente?')">
+                                            <button type="submit" class="btn btn-sm" style="background:rgba(239,68,68,0.1);color:#EF4444;border:none;border-radius:8px;"
+                                                    title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(clientes)}">
