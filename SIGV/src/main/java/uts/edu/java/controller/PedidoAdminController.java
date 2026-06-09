@@ -10,6 +10,8 @@ import uts.edu.java.repository.PedidoRepository;
 import java.util.List;
 import java.util.Optional;
 
+
+
 @Controller
 @RequestMapping("/admin/pedidos")
 public class PedidoAdminController {
@@ -33,6 +35,19 @@ public class PedidoAdminController {
         if (opt.isEmpty()) return "redirect:/admin/pedidos";
         model.addAttribute("pedido", opt.get());
         return "admin/pedido-detalle";
+    }
+
+    @PostMapping("/{id}/estado")
+    public String cambiarEstado(@PathVariable Integer id,
+                                @RequestParam String estado,
+                                RedirectAttributes ra) {
+        Optional<Pedido> opt = pedidoRepository.findById(id);
+        if (opt.isEmpty()) return "redirect:/admin/pedidos";
+        Pedido pedido = opt.get();
+        pedido.setEstado(estado);
+        pedidoRepository.save(pedido);
+        ra.addFlashAttribute("success", "Pedido #" + id + " actualizado a " + estado);
+        return "redirect:/admin/pedidos/{id}";
     }
 
 }

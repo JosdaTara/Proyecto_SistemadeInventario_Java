@@ -41,10 +41,15 @@ public class ClienteController {
         Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
         long misPedidos = pedidoRepository.countByUsuario(usuario);
         long enviados = pedidoRepository.countByUsuarioAndEstado(usuario, "ENVIADO");
+        long entregados = pedidoRepository.countByUsuarioAndEstado(usuario, "ENTREGADO");
+        long cancelados = pedidoRepository.countByUsuarioAndEstado(usuario, "CANCELADO");
+        long pendientes = misPedidos - entregados - cancelados;
         model.addAttribute("usuario", usuario.getNombre());
         model.addAttribute("totalProductos", productoRepository.count());
         model.addAttribute("misPedidos", misPedidos);
         model.addAttribute("enviados", enviados);
+        model.addAttribute("entregados", entregados);
+        model.addAttribute("pendientes", pendientes);
         model.addAttribute("productos", productoRepository.findTop6ByActivoTrueOrderByIdProductoDesc());
         return "cliente/dashboard";
     }
@@ -160,7 +165,9 @@ public class ClienteController {
 
     @SuppressWarnings("unchecked")
     @PostMapping("/checkout")
-    public String checkout(HttpSession session, Principal principal, RedirectAttributes ra) {
+    public String checkout(HttpSession session, Principal principal,
+                           @RequestParam(defaultValue = "EFECTIVO") String metodoPago,
+                           RedirectAttributes ra) {
         try {
             List<Map<String, Object>> items = (List<Map<String, Object>>) session.getAttribute("carrito");
             if (items == null || items.isEmpty()) {
@@ -200,7 +207,7 @@ public class ClienteController {
             factura.setPedido(pedido);
             factura.setNumeroFactura("FAC-" + String.format("%05d", pedido.getIdPedido()));
             factura.setTotal(total);
-            factura.setMetodoPago("EFECTIVO");
+            factura.setMetodoPago(metodoPago);
             facturaRepository.saveAndFlush(factura);
 
             session.removeAttribute("carrito");
@@ -221,6 +228,25 @@ public class ClienteController {
         model.addAttribute("usuario", principal.getName());
         model.addAttribute("pedidos", pedidos);
         return "cliente/pedidos";
+    }
+
+    @PostMapping("/pedido/{id}/cancelar")
+    public String cancelarPedido(@PathVariable Integer id, Principal principal, RedirectAttributes ra) {
+        Optional<Pedido> opt = pedidoRepository.findById(id);
+        if (opt.isEmpty()) return "redirect:/cliente/pedidos";
+        Pedido pedido = opt.get();
+        Usuario usuario = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
+        if (!pedido.getUsuario().getIdUsuario().equals(usuario.getIdUsuario())) {
+            return "redirect:/cliente/pedidos";
+        }
+        if (!"ENVIADO".equals(pedido.getEstado())) {
+            ra.addFlashAttribute("error", "Este pedido no se puede cancelar");
+            return "redirect:/cliente/pedidos";
+        }
+        pedido.setEstado("CANCELADO");
+        pedidoRepository.save(pedido);
+        ra.addFlashAttribute("success", "Pedido #" + id + " cancelado");
+        return "redirect:/cliente/pedidos";
     }
 
     @GetMapping("/pedido/{id}")

@@ -120,11 +120,18 @@
                             <span style="color:var(--text-dim);">Total a pagar:</span>
                             <span style="font-size:1.8rem;font-weight:800;color:var(--primary);margin-left:0.75rem;" th:text="'$' + ${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')}">$0</span>
                         </div>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 align-items-center">
                             <a th:href="@{/cliente/productos}" class="btn btn-outline-custom" style="border-radius:8px;">
                                 <i class="bi bi-arrow-left me-1"></i>Seguir Comprando
                             </a>
-                            <form method="post" th:action="@{/cliente/checkout}">
+                            <form method="post" th:action="@{/cliente/checkout}" class="d-flex align-items-center gap-2">
+                                <select name="metodoPago" class="form-select" required style="border-radius:8px;width:auto;">
+                                    <option value="EFECTIVO">Efectivo</option>
+                                    <option value="TARJETA_CREDITO">Tarjeta Credito</option>
+                                    <option value="TARJETA_DEBITO">Tarjeta Debito</option>
+                                    <option value="TRANSFERENCIA">Transferencia</option>
+                                    <option value="NEQUI">Nequi</option>
+                                </select>
                                 <button type="submit" class="btn btn-primary-custom" style="border-radius:8px;">
                                     <i class="bi bi-check2-circle me-1"></i>Confirmar Pedido
                                 </button>

@@ -95,9 +95,16 @@
                     <a th:href="@{/cliente/pedidos}" class="btn btn-outline-custom" style="border-radius:8px;">
                         <i class="bi bi-arrow-left me-1"></i>Volver a Mis Pedidos
                     </a>
-                    <a th:href="@{'/cliente/factura/' + ${pedido.idPedido}}" class="btn btn-primary-custom" style="border-radius:8px;">
-                        <i class="bi bi-file-earmark-text me-1"></i>Ver Factura
-                    </a>
+                    <div class="d-flex gap-2">
+                        <form th:if="${pedido.estado == 'ENVIADO'}" method="post" th:action="@{/cliente/pedido/{id}/cancelar(id=${pedido.idPedido})}" onsubmit="return confirm('Cancelar este pedido?')">
+                            <button type="submit" class="btn btn-danger" style="border-radius:8px;">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar Pedido
+                            </button>
+                        </form>
+                        <a th:href="@{'/cliente/factura/' + ${pedido.idPedido}}" class="btn btn-primary-custom" style="border-radius:8px;">
+                            <i class="bi bi-file-earmark-text me-1"></i>Ver Factura
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

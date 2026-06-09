@@ -79,27 +79,22 @@
                             <p>Mis pedidos</p>
                         </div>
                     </div>
-                        <div class="stat-card">
-                            <div class="stat-icon purple">
-                                <i class="bi bi-truck"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 th:text="${enviados}">0</h3>
-                                <p>Enviados</p>
-                            </div>
-                        </div>
-                        <div class="stat-info">
-                            <h3 th:text="${pendientes}">0</h3>
-                            <p>Pendientes</p>
-                        </div>
-                    </div>
                     <div class="stat-card">
-                        <div class="stat-icon teal">
+                        <div class="stat-icon purple">
                             <i class="bi bi-truck"></i>
                         </div>
                         <div class="stat-info">
                             <h3 th:text="${enviados}">0</h3>
-                            <p>En envio</p>
+                            <p>Enviados</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 th:text="${pendientes}">0</h3>
+                            <p>Pendientes</p>
                         </div>
                     </div>
                 </div>
